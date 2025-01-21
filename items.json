@@ -1,0 +1,3356 @@
+[
+  {
+    "Item_Id": "0000000000000000000000000000008C",
+    "Legacy_Id": "140",
+    "DisplayName": "Adamantine Sickle",
+    "Description": "Passive: While you are below 50% HP you gain 15 Strength.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 10.0
+      },
+      {
+        "TagName": "Character.Stat.LifeStealPercent",
+        "Value": 7.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000771",
+    "Legacy_Id": "1905",
+    "DisplayName": "Adroit Ring",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000007A1",
+    "Legacy_Id": "1953",
+    "DisplayName": "Aegis of Acceleration",
+    "Description": "Active: You become invulnerable to damage and healing for 1.5s, and prevented from taking any actions except moving. Each instance of damage prevented provides you 7% Movement Speed for 6s, stacking up to 3 times. Cooldown: 140s.",
+    "Stats": []
+  },
+  {
+    "Item_Id": "000000000000000000000000000003F4",
+    "Legacy_Id": "1012",
+    "DisplayName": "Archmage",
+    "Description": "Passive: Your next damage dealing ability deals 20% bonus damage.  20s Cooldown.",
+    "Stats": []
+  },
+  {
+    "Item_Id": "000000000000000000000000000003F6",
+    "Legacy_Id": "1014",
+    "DisplayName": "Warden",
+    "Description": "Passive: Each second you are nearby an ally god gain a stacking buff that provides 1+0.1 per level of each protection. Stacks up to 10 times. At 10 Stacks, you and allies withins 10m gain 5% increased Movement Speed. Stacks last 10s.",
+    "Stats": []
+  },
+  {
+    "Item_Id": "000000000000000000000000000003F7",
+    "Legacy_Id": "1015",
+    "DisplayName": "Ranger",
+    "Description": "Passive: Basic attacks and abilities deal 10% bonus damage to enemies 7.5m or further.",
+    "Stats": []
+  },
+  {
+    "Item_Id": "000000000000000000000000000003F8",
+    "Legacy_Id": "1016",
+    "DisplayName": "Spiritualist",
+    "Description": "Passive: Basic attacks deal 12.5% bonus physical damage to all enemies within 2.5m of the target.",
+    "Stats": []
+  },
+  {
+    "Item_Id": "000000000000000000000000000000EB",
+    "Legacy_Id": "235",
+    "DisplayName": "Hastened Fatalis",
+    "Description": "Passive: When you hit an enemy god with a basic attack, the Basic Attack Movement Penalty is reduced by 25% for 2s.  Stacks up to 3 times.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 20.0
+      },
+      {
+        "TagName": "Character.Stat.AttackSpeedPercent",
+        "Value": 25.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000DD",
+    "Legacy_Id": "221",
+    "DisplayName": "Avatar's Parashu",
+    "Description": "Active: You gain 25% increased Strength and become Displacement Immune for 10s. Cooldown: 120s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 100.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000008D",
+    "Legacy_Id": "141",
+    "DisplayName": "Axe",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000008E",
+    "Legacy_Id": "142",
+    "DisplayName": "Bagua Mirror",
+    "Description": "Passive: When you take Magical Damage you gain 5 + 1*Level Strength and 5 + 2*Level Intelligence for 6s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 66.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000008F",
+    "Legacy_Id": "143",
+    "DisplayName": "Obsidian Shard",
+    "Description": "Passive: You gain the Shattering effect, granting you 20% Penetration. This effect does not stack with itself.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 60.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000090",
+    "Legacy_Id": "144",
+    "DisplayName": "Demon Blade",
+    "Description": "Passive: When you Critically Strike an enemy you gain 15% Attack Speed for 4s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 35.0
+      },
+      {
+        "TagName": "Character.Stat.AttackSpeedPercent",
+        "Value": 20.0
+      },
+      {
+        "TagName": "Character.Stat.CritChance",
+        "Value": 25.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000091",
+    "Legacy_Id": "145",
+    "DisplayName": "Battle Axe",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 15.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 100.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000787",
+    "Legacy_Id": "1927",
+    "DisplayName": "Berserker's Shield",
+    "Description": "Passive: While below 60% Health you become Berserk for 8s. While Berserk, you gain 30 Protections and 15% Attack Speed. This effect can only occur once every 8 seconds.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 20.0
+      },
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 20.0
+      },
+      {
+        "TagName": "Character.Stat.HealthPerTime",
+        "Value": 5.0
+      },
+      {
+        "TagName": "Character.Stat.AttackSpeedPercent",
+        "Value": 25.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000092",
+    "Legacy_Id": "146",
+    "DisplayName": "Stone of Binding",
+    "Description": "Passive: Enemy gods hit by your Hard CC effects lose 15 Physical Protection and 15 Magical Protection for 4s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 40.0
+      },
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 30.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000093",
+    "Legacy_Id": "147",
+    "DisplayName": "Blinking Amulet",
+    "Description": "Active: You are Teleported to a targeted location up to 7.2m away. Cannot be used for 3s upon dealing or taking damage, and cannot be activated while firing an ability. Cooldown: 90s",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 200.0
+      },
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 15.0
+      },
+      {
+        "TagName": "Character.Stat.MovementSpeed",
+        "Value": 5.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000766",
+    "Legacy_Id": "1894",
+    "DisplayName": "Blink Rune",
+    "Description": "Active: You are Teleported to a targeted location up to 5.6m away. This effect can be used during combat or while firing another ability. Cooldown: 240s",
+    "Stats": []
+  },
+  {
+    "Item_Id": "00000000000000000000000000000094",
+    "Legacy_Id": "148",
+    "DisplayName": "Blood-Bound Book",
+    "Description": "Active: You gain a 10% of your max HP + 80% Intelligence from items HP Shield for 6s. The shield grants 20% lifesteal while active. Killing a god reduces the current cooldown by 50% Cooldown: 140.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 50.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 150.0
+      },
+      {
+        "TagName": "Character.Stat.LifeStealPercent",
+        "Value": 15.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000095",
+    "Legacy_Id": "149",
+    "DisplayName": "Bloodforge",
+    "Description": "Active: You gain a 10% of your max HP + 100% Strength from items HP Shield for 6s. The shield grants 20% lifesteal while active. Killing a god reduces the current cooldown by 50%. Cooldown: 140.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 45.0
+      },
+      {
+        "TagName": "Character.Stat.AttackSpeedPercent",
+        "Value": 15.0
+      },
+      {
+        "TagName": "Character.Stat.LifeStealPercent",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000767",
+    "Legacy_Id": "1895",
+    "DisplayName": "Book of Thoth",
+    "Description": "Passive: You permanently gain 10 Mana per Stack, and receive 1 Stack per 900 Damage Dealt to minions and Jungle Monsters, with damage to Gods counting double. You gain Intelligence equal to 4% of your Mana from items. At 50 stacks this item Evolves, gaining 10 Penetration and increasing the Intelligence gained from Mana to 6%.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 35.0
+      },
+      {
+        "TagName": "Character.Stat.MaxMana",
+        "Value": 400.0
+      },
+      {
+        "TagName": "Character.Stat.ManaPerTime",
+        "Value": 4.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000096",
+    "Legacy_Id": "150",
+    "DisplayName": "Bow",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.AttackSpeedPercent",
+        "Value": 5.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000097",
+    "Legacy_Id": "151",
+    "DisplayName": "Bragi's Harp",
+    "Description": "Passive: All targets hit by your basic attacks take 10 + 3 per level bonus Magical Damage.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 35.0
+      },
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 25.0
+      },
+      {
+        "TagName": "Character.Stat.AttackSpeedPercent",
+        "Value": 15.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000098",
+    "Legacy_Id": "152",
+    "DisplayName": "Brawler's Ruin",
+    "Description": "Passive: Enemy gods hit by your basic attacks or abilities have 40% reduced healing for 4s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 60.0
+      },
+      {
+        "TagName": "Character.Stat.PhysicalPenetrationPercent",
+        "Value": 5.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000000",
+    "Legacy_Id": "-1",
+    "DisplayName": "Brawler's Ruin",
+    "Description": "Passive: Enemy gods hit by your basic attacks or abilities have 40% reduced healing for 4s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 45.0
+      },
+      {
+        "TagName": "Character.Stat.PhysicalPenetrationPercent",
+        "Value": 5.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000768",
+    "Legacy_Id": "1896",
+    "DisplayName": "Breastplate of Valor",
+    "Description": "Passive: When you lose 500 + 25*Level HP, your ability cooldowns are reduced by 1s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 40.0
+      },
+      {
+        "TagName": "Character.Stat.MaxMana",
+        "Value": 250.0
+      },
+      {
+        "TagName": "Character.Stat.ManaPerTime",
+        "Value": 2.0
+      },
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 25.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000DB",
+    "Legacy_Id": "219",
+    "DisplayName": "Caestus",
+    "Description": "Passive: When you are hit by a Hard CC effect you gain 15 Physical Protection and 15 Magical Protection for 4s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 10.0
+      },
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000775",
+    "Legacy_Id": "1909",
+    "DisplayName": "Captain's Ring",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 10.0
+      },
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000099",
+    "Legacy_Id": "153",
+    "DisplayName": "Chronos' Pendant",
+    "Description": "Passive: Your ability cooldowns are reduced by 1s every 10s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 40.0
+      },
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 25.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000762",
+    "Legacy_Id": "1890",
+    "DisplayName": "Circe's Hexstone",
+    "Description": "Active: You are Polymorphed and begin a short Charge forwards, damaging enemies hit for 50 Physical Damage. Hitting a god ends the Charge, Knocking them Up and dealing 10% of their Current HP as bonus Physical Damage. While Polymorphed you gain CC Immunity and 60 Protections. Cooldown: 90s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 400.0
+      },
+      {
+        "TagName": "Character.Stat.HealthPerTime",
+        "Value": 4.0
+      },
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000009A",
+    "Legacy_Id": "154",
+    "DisplayName": "Circlet",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MaxMana",
+        "Value": 150.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000077B",
+    "Legacy_Id": "1915",
+    "DisplayName": "Cursed Sickle",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.LifeStealPercent",
+        "Value": 15.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000009B",
+    "Legacy_Id": "155",
+    "DisplayName": "Dagger of Frenzy",
+    "Description": "Active: You gain 10+2 per level Basic Attack Damage and 30% Attack Speed for the next 5 basic attacks. Killing a god refreshes the current cooldown. Cooldown: 15s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 40.0
+      },
+      {
+        "TagName": "Character.Stat.AttackSpeedPercent",
+        "Value": 15.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000000",
+    "Legacy_Id": "-1",
+    "DisplayName": "Damaru Drum",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 50.0
+      },
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 85.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000009C",
+    "Legacy_Id": "156",
+    "DisplayName": "Deathbringer",
+    "Description": "Passive: You gain 25% increased Critical Strike Damage.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 55.0
+      },
+      {
+        "TagName": "Character.Stat.CritChance",
+        "Value": 30.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000009D",
+    "Legacy_Id": "157",
+    "DisplayName": "Death Metal",
+    "Description": "Active: You and allied gods within 6.4m gain 10 + 1*Level Strength, 15 + 2*Level Intelligence, and 20% Attack Speed for 6s. Cooldown: 60s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 40.0
+      },
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 45.0
+      },
+      {
+        "TagName": "Character.Stat.CritChance",
+        "Value": 20.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000782",
+    "Legacy_Id": "1922",
+    "DisplayName": "Demonic Grip",
+    "Description": "Passive: When you damage an enemy god or jungle boss with a basic attack, gain the Piercing effect, granting you 7.5% Penetration for 4s. Stacks up to 4 times.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 55.0
+      },
+      {
+        "TagName": "Character.Stat.AttackSpeedPercent",
+        "Value": 25.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000763",
+    "Legacy_Id": "1891",
+    "DisplayName": "Devourer's Gauntlet",
+    "Description": "Passive: You permanently gain 0.3 Strength, and 0.10% Lifesteal per Stack, and receive 1 Stack per 600 Damage Dealt to minions and Jungle Monsters, with damage to Gods counting double. At 50 stacks this item Evolves, gaining 10 Penetration.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 30.0
+      },
+      {
+        "TagName": "Character.Stat.LifeStealPercent",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000009E",
+    "Legacy_Id": "158",
+    "DisplayName": "Divine Ruin",
+    "Description": "Passive: Enemy gods hit by your basic attacks or abilities have 40% reduced healing for 4s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 80.0
+      },
+      {
+        "TagName": "Character.Stat.MagicalPenetrationPercent",
+        "Value": 5.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000E57",
+    "Legacy_Id": "3671",
+    "DisplayName": "Dominance",
+    "Description": "Passive: Your basic attacks Deal bonus damage as if your target had 20% less Protections.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 50.0
+      },
+      {
+        "TagName": "Character.Stat.MaxMana",
+        "Value": 200.0
+      },
+      {
+        "TagName": "Character.Stat.ManaPerTime",
+        "Value": 4.0
+      },
+      {
+        "TagName": "Character.Stat.AttackSpeedPercent",
+        "Value": 15.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000078C",
+    "Legacy_Id": "1932",
+    "DisplayName": "Doom Orb",
+    "Description": "PASSIVE: Killing or assisting an enemy minion provides you with 1 stack, granting 1% Movement Speed and 4 Intelligence per stack. Stacks last for 15s and stack up to 5 times. Enemy gods provide 5 stacks.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 75.0
+      },
+      {
+        "TagName": "Character.Stat.MaxMana",
+        "Value": 150.0
+      },
+      {
+        "TagName": "Character.Stat.ManaPerTime",
+        "Value": 2.0
+      },
+      {
+        "TagName": "Character.Stat.MagicalPenetrationPercent",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000DE",
+    "Legacy_Id": "222",
+    "DisplayName": "Dreamer's Idol",
+    "Description": "Active: You gain 25% increased Intelligence and become Displacement Immune for 10s. Cooldown: 120s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 140.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000000",
+    "Legacy_Id": "-1",
+    "DisplayName": "Druid Club",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 25.0
+      },
+      {
+        "TagName": "Character.Stat.ManaPerTime",
+        "Value": 2.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000EA",
+    "Legacy_Id": "234",
+    "DisplayName": "Rod of Tahuti",
+    "Description": "Passive: Gain additional Intelligence equal to 20% of your Intelligence from items.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 70.0
+      },
+      {
+        "TagName": "Character.Stat.MaxMana",
+        "Value": 250.0
+      },
+      {
+        "TagName": "Character.Stat.ManaPerTime",
+        "Value": 2.0
+      },
+      {
+        "TagName": "Character.Stat.MagicalPenetrationPercent",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000E6",
+    "Legacy_Id": "230",
+    "DisplayName": "Elixir of Intelligence",
+    "Description": "Active: Item is Consumed, then gain 120 Intelligence permanently. These can stack.",
+    "Stats": []
+  },
+  {
+    "Item_Id": "000000000000000000000000000000E5",
+    "Legacy_Id": "229",
+    "DisplayName": "Elixir of Strength",
+    "Description": "Active: Item is Consumed, then gain 75 Strength permanently. These can stack.",
+    "Stats": []
+  },
+  {
+    "Item_Id": "00000000000000000000000000000773",
+    "Legacy_Id": "1907",
+    "DisplayName": "Engraved Guard",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 12.0
+      },
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 12.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000E0B",
+    "Legacy_Id": "3595",
+    "DisplayName": "Eros' Bow",
+    "Description": "Active: Mark an ally god. Each Basic Attack that hits an enemy heals the marked god for 2% of your Maximum Health, once per Basic Attack. Only one ally can be marked at a time. Cooldown: 1s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 300.0
+      },
+      {
+        "TagName": "Character.Stat.AttackSpeedPercent",
+        "Value": 30.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000000",
+    "Legacy_Id": "-1",
+    "DisplayName": "Eros' Bow",
+    "Description": "",
+    "Stats": []
+  },
+  {
+    "Item_Id": "0000000000000000000000000000009F",
+    "Legacy_Id": "159",
+    "DisplayName": "Evil Eye",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 25.0
+      },
+      {
+        "TagName": "Character.Stat.PhysicalPenetrationPercent",
+        "Value": 5.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000E1",
+    "Legacy_Id": "225",
+    "DisplayName": "Eye of Providence",
+    "Description": "Passive: Gain an additional 50 Gold when destroying a ward that provides gold.",
+    "Stats": []
+  },
+  {
+    "Item_Id": null,
+    "Legacy_Id": null,
+    "DisplayName": "",
+    "Description": "",
+    "Stats": []
+  },
+  {
+    "Item_Id": null,
+    "Legacy_Id": null,
+    "DisplayName": "",
+    "Description": "",
+    "Stats": []
+  },
+  {
+    "Item_Id": "000000000000000000000000000000A1",
+    "Legacy_Id": "161",
+    "DisplayName": "Eye of the Storm",
+    "Description": "Active: Toggle to Vortex enemies around you toward you, damaging you for 3% of your Max Health as Magical Damage per second while active. Automatically deactivates at 200 Health remaining.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 30.0
+      },
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 20.0
+      },
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 20.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 150.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000E0C",
+    "Legacy_Id": "3596",
+    "DisplayName": "Fencer's Buckler",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 10.0
+      },
+      {
+        "TagName": "Character.Stat.AttackSpeedPercent",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000A0",
+    "Legacy_Id": "160",
+    "DisplayName": "Flaming Pearl",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 25.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 100.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000000",
+    "Legacy_Id": "-1",
+    "DisplayName": "Frostrune Hammer",
+    "Description": "PASSIVE - Enemy gods damaged by your basic attacks are slowed by 15% for 2 seconds.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 20.0
+      },
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 50.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 200.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000A2",
+    "Legacy_Id": "162",
+    "DisplayName": "Gem",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 15.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000A3",
+    "Legacy_Id": "163",
+    "DisplayName": "Gem of Focus",
+    "Description": "Passive: Every time you activate an ability that costs mana you gain 15 Intelligence and 3% Movement Speed for 10s. Stacks up to 3 times.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 40.0
+      },
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 15.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000A4",
+    "Legacy_Id": "164",
+    "DisplayName": "Gem of Isolation",
+    "Description": "Passive: Enemy gods hit by your abilities are affected by a 15% Slow for 2s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 50.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 350.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000785",
+    "Legacy_Id": "1925",
+    "DisplayName": "Genji's Guard",
+    "Description": "Passive: When you take Magical Damage from Abilities your cooldowns are reduced by 3s. This can only occur once every 45s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 45.0
+      },
+      {
+        "TagName": "Character.Stat.MaxMana",
+        "Value": 300.0
+      },
+      {
+        "TagName": "Character.Stat.ManaPerTime",
+        "Value": 5.0
+      },
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000000",
+    "Legacy_Id": "-1",
+    "DisplayName": "Gladiator's Greathammer",
+    "Description": "Passive - you gain 1 Additional Strength for each 10 Physical or Magical Protections you have",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 40.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 300.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000789",
+    "Legacy_Id": "1929",
+    "DisplayName": "Glorious Pridwen",
+    "Description": "Active: Create an explosion dealing 55% of your Protections as Magical Damage and slowing targets by 25% for 3s in a 4.8m radius. Then you gain a Shield equal to 80% of your Protections for 5s. When destroyed, by timing out or being depleted, you explode again. Cooldown: 45s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 25.0
+      },
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 25.0
+      },
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 20.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000E7",
+    "Legacy_Id": "231",
+    "DisplayName": "Bracer of The Abyss",
+    "Description": "Passive: When you hit an enemy god or jungle boss with an ability or basic attack you gain 10 Basic Attack Damage for 10s. Stacks up to 6 times.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 60.0
+      },
+      {
+        "TagName": "Character.Stat.AttackSpeedPercent",
+        "Value": 30.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000076F",
+    "Legacy_Id": "1903",
+    "DisplayName": "Health Chalice",
+    "Description": "Active: Consume a charge to heal 15 health per second for 14 seconds. Starts with 3 charges. Charges are replenished when you return to base.",
+    "Stats": []
+  },
+  {
+    "Item_Id": "000000000000000000000000000000D8",
+    "Legacy_Id": "216",
+    "DisplayName": "Health Potion",
+    "Description": "Active: Item is Consumed, then Heals 15 health per tick, 14 ticks over 14s. Can carry up to 3 of this item.",
+    "Stats": []
+  },
+  {
+    "Item_Id": "000000000000000000000000000007A2",
+    "Legacy_Id": "1954",
+    "DisplayName": "Heartseeker",
+    "Description": "Passive: Your abilities deal bonus physical damage as a % of the target's max HP. The %HP damage is equal to 2.5% of your Strength.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 40.0
+      },
+      {
+        "TagName": "Character.Stat.MaxMana",
+        "Value": 150.0
+      },
+      {
+        "TagName": "Character.Stat.ManaPerTime",
+        "Value": 2.0
+      },
+      {
+        "TagName": "Character.Stat.PhysicalPenetrationPercent",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000A5",
+    "Legacy_Id": "165",
+    "DisplayName": "Helm of Darkness",
+    "Description": "Active: You become Stealthed and pass through players and player-made walls for 6s. Cannot be activated while firing an ability. Cooldown: 90s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 50.0
+      },
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 25.0
+      },
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 30.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000A6",
+    "Legacy_Id": "166",
+    "DisplayName": "Helm of Radiance",
+    "Description": "Passive: When you take Physical Damage you gain 5 Physical Protection for 6s. Stacks up to 5 times.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 60.0
+      },
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 25.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000000",
+    "Legacy_Id": "-1",
+    "DisplayName": "Helskor",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 55.0
+      },
+      {
+        "TagName": "Character.Stat.MovementSpeed",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000007A3",
+    "Legacy_Id": "1955",
+    "DisplayName": "Hide of the Nemean Lion",
+    "Description": "Passive: Reflects 15% of all Basic Attack damage back to the attacker as Physical Damage.",
+    "Stats": []
+  },
+  {
+    "Item_Id": null,
+    "Legacy_Id": null,
+    "DisplayName": "",
+    "Description": "",
+    "Stats": []
+  },
+  {
+    "Item_Id": null,
+    "Legacy_Id": null,
+    "DisplayName": "",
+    "Description": "",
+    "Stats": []
+  },
+  {
+    "Item_Id": "00000000000000000000000000000000",
+    "Legacy_Id": "-1",
+    "DisplayName": "HogHelmet",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 200.0
+      },
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 10.0
+      },
+      {
+        "TagName": "Character.Stat.MovementSpeed",
+        "Value": 5.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000077A",
+    "Legacy_Id": "1914",
+    "DisplayName": "Hooked Sword",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.CritChance",
+        "Value": 15.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000772",
+    "Legacy_Id": "1906",
+    "DisplayName": "Hunter's Bow",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.AttackSpeedPercent",
+        "Value": 15.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000A7",
+    "Legacy_Id": "167",
+    "DisplayName": "Hussar's Wings",
+    "Description": "Passive: You are immune to slows.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 40.0
+      },
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 30.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 400.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000A8",
+    "Legacy_Id": "168",
+    "DisplayName": "Hydra's Lament",
+    "Description": "Passive: When you use an ability you gain 30% increased Basic Attack Damage on your next basic attack for 8s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 40.0
+      },
+      {
+        "TagName": "Character.Stat.MaxMana",
+        "Value": 250.0
+      },
+      {
+        "TagName": "Character.Stat.ManaPerTime",
+        "Value": 5.0
+      },
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000000",
+    "Legacy_Id": "-1",
+    "DisplayName": "Ileke Necklace",
+    "Description": "Passive: When you get a Kill or Assist on an enemy god you restore 5% of your max HP over 6s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 350.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000003F9",
+    "Legacy_Id": "1017",
+    "DisplayName": "Sundering Arc",
+    "Description": "Active: Instantly deals 175 + 25 per level true damage to Jungle Monsters and Jungle Bosses. Deals 500 damage at level 13 and above.",
+    "Stats": []
+  },
+  {
+    "Item_Id": null,
+    "Legacy_Id": null,
+    "DisplayName": "",
+    "Description": "",
+    "Stats": []
+  },
+  {
+    "Item_Id": null,
+    "Legacy_Id": null,
+    "DisplayName": "",
+    "Description": "",
+    "Stats": []
+  },
+  {
+    "Item_Id": "000000000000000000000000000007A4",
+    "Legacy_Id": "1956",
+    "DisplayName": "Infused Axe",
+    "Description": "Passive: When you get a Kill or Assist on an enemy god you instantly restore 25% of your Mana.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 15.0
+      },
+      {
+        "TagName": "Character.Stat.MaxMana",
+        "Value": 150.0
+      },
+      {
+        "TagName": "Character.Stat.ManaPerTime",
+        "Value": 1.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000A9",
+    "Legacy_Id": "169",
+    "DisplayName": "Jade Scepter",
+    "Description": "Active: Enemy gods in front of you are Displaced away from you and lose 25% Strength and Intelligence for 4s. Cooldown: 60s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 80.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 200.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000AA",
+    "Legacy_Id": "170",
+    "DisplayName": "Jotunn's Revenge",
+    "Description": "Passive: When you get a Kill or Assist on an enemy god your Non-ultimate Cooldowns are reduced by 1s and your Ultimate Cooldown is reduced by 5s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 45.0
+      },
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 25.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000AB",
+    "Legacy_Id": "171",
+    "DisplayName": "Killing Stone",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 40.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000AC",
+    "Legacy_Id": "172",
+    "DisplayName": "Kopesh",
+    "Description": "Passive: When you Critically Strike an enemy god you gain 5% Movement Speed for 4s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 10.0
+      },
+      {
+        "TagName": "Character.Stat.CritChance",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000AD",
+    "Legacy_Id": "173",
+    "DisplayName": "Legionnaire Armor",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 20.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000E55",
+    "Legacy_Id": "3669",
+    "DisplayName": "Lernaean Bow",
+    "Description": "Active: Fire a poisonous arrow that pierces all enemies 8.8m in front of you, dealing 130% of your Basic Attack Damage as Physical Damage and inflicting them with 40% reduced healing for 4s. This arrow can Critically Strike and passes through walls. Cooldown: 20s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 40.0
+      },
+      {
+        "TagName": "Character.Stat.AttackSpeedPercent",
+        "Value": 30.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000AE",
+    "Legacy_Id": "174",
+    "DisplayName": "Leviathan's Hide",
+    "Description": "Passive: Enemies who hit you with Basic Attacks lose 10% Strength for 4s. Stacks up to 2 times.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 40.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 300.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000080C",
+    "Legacy_Id": "2060",
+    "DisplayName": "Lifebinder",
+    "Description": "Active: Send out a wave of living energy dealing 125 + 5 per level magic damage and marking enemy Gods for 6 seconds. The first Ally who damages a marked target will gain a shield and heal for 130 + 5 per level and consume the Mark. Kills and Assists will reduce the current cooldown by 20%. Cooldown 15s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 35.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 350.0
+      },
+      {
+        "TagName": "Character.Stat.HealthPerTime",
+        "Value": 3.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000077C",
+    "Legacy_Id": "1916",
+    "DisplayName": "Gladiator's Shield",
+    "Description": "Passive: Enemies hit by your abilities take 15 + 25% of your Item Protections as bonus Physical Damage. This effect only triggers once per ability per god.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 40.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 150.0
+      },
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000AF",
+    "Legacy_Id": "175",
+    "DisplayName": "Lucerne Hammer",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 15.0
+      },
+      {
+        "TagName": "Character.Stat.PhysicalPenetrationPercent",
+        "Value": 5.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000DA",
+    "Legacy_Id": "218",
+    "DisplayName": "Mana Potion",
+    "Description": "Active: Item is Consumed, then Restores 12 mana per tick, 14 ticks over 14s. Can carry up to 3 of this item.",
+    "Stats": []
+  },
+  {
+    "Item_Id": "00000000000000000000000000000770",
+    "Legacy_Id": "1904",
+    "DisplayName": "Mana Tome",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MaxMana",
+        "Value": 250.0
+      },
+      {
+        "TagName": "Character.Stat.ManaPerTime",
+        "Value": 2.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000B0",
+    "Legacy_Id": "176",
+    "DisplayName": "Manchu Bow",
+    "Description": "Passive: All targets hit by your basic attacks take 10 bonus Physical Damage.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 10.0
+      },
+      {
+        "TagName": "Character.Stat.AttackSpeedPercent",
+        "Value": 8.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000B1",
+    "Legacy_Id": "177",
+    "DisplayName": "Medallion",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 75.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000778",
+    "Legacy_Id": "1912",
+    "DisplayName": "Medal of Defense",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 12.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 125.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000779",
+    "Legacy_Id": "1913",
+    "DisplayName": "Medal of Disruption",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 12.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 150.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000E0",
+    "Legacy_Id": "224",
+    "DisplayName": "Golden Blade",
+    "Description": "Passive: Basic attacks deal 25 + 10% of your Item Protections as bonus Physical Damage to all enemies within 2.5m of the target.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 25.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 150.0
+      },
+      {
+        "TagName": "Character.Stat.AttackSpeedPercent",
+        "Value": 20.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000000",
+    "Legacy_Id": "-1",
+    "DisplayName": "Minoan Labrys",
+    "Description": "ACTIVE - You become CC Immune for 3s. Cooldown 180s",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 20.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 200.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000000",
+    "Legacy_Id": "-1",
+    "DisplayName": "Multi Chalice",
+    "Description": "Active: Restore 64 Health & Mana over 7s. Doesn't stack.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.HealthPerTime",
+        "Value": 0.5
+      },
+      {
+        "TagName": "Character.Stat.ManaPerTime",
+        "Value": 1.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000000",
+    "Legacy_Id": "-1",
+    "DisplayName": "Multi Chalice",
+    "Description": "Active: Restore 64 Health & Mana over 7s. Doesn't stack.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.HealthPerTime",
+        "Value": 0.5
+      },
+      {
+        "TagName": "Character.Stat.ManaPerTime",
+        "Value": 1.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000000",
+    "Legacy_Id": "-1",
+    "DisplayName": "Multi Chalice",
+    "Description": "Active: Restore 64 Health & Mana over 7s. Doesn't stack.",
+    "Stats": []
+  },
+  {
+    "Item_Id": "00000000000000000000000000000E0D",
+    "Legacy_Id": "3597",
+    "DisplayName": "Multi Potion",
+    "Description": "Active: Item is Consumed, then Heals 9 health per tick and 8 mana per tick, 14 ticks over 14s. Can carry up to 3 of this item.",
+    "Stats": []
+  },
+  {
+    "Item_Id": "000000000000000000000000000000B2",
+    "Legacy_Id": "178",
+    "DisplayName": "Musashi's Dual Swords",
+    "Description": "Passive: When you Critically Strike an enemy you gain 10% Movement Speed for 4s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 40.0
+      },
+      {
+        "TagName": "Character.Stat.CritChance",
+        "Value": 30.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000784",
+    "Legacy_Id": "1924",
+    "DisplayName": "Mystical Mail",
+    "Description": "Passive: All enemies within 4m are dealt 20 + 1.5 per level Magical Damage per second.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 40.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 400.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000E4",
+    "Legacy_Id": "228",
+    "DisplayName": "Necronomicon",
+    "Description": "Passive: When you get a Kill or Assist on an enemy god you gain 1 stack of 50 Intelligence but you also lose 10 Physical Protection and 10 Magical Protection per stack. Stacks up to 3 times. All stacks are removed on your death.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 50.0
+      },
+      {
+        "TagName": "Character.Stat.PhysicalPenetrationPercent",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000E3",
+    "Legacy_Id": "227",
+    "DisplayName": "Oath-Sworn Spear",
+    "Description": "Passive: Enemy gods hit by your abilities lose 1 per level Physical Protection for 4s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 45.0
+      },
+      {
+        "TagName": "Character.Stat.PhysicalPenetrationPercent",
+        "Value": 5.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000DC",
+    "Legacy_Id": "220",
+    "DisplayName": "Odigba",
+    "Description": "Passive: When you get a Kill or Assist on an enemy god you restore 5% of your max HP over 6s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 125.0
+      },
+      {
+        "TagName": "Character.Stat.MaxMana",
+        "Value": 150.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000E56",
+    "Legacy_Id": "3670",
+    "DisplayName": "Odysseus' Bow",
+    "Description": "Passive : Every 4th Successful Basic Attack arcs lightning to 4 targets, dealing 15 + 60% Standard Basic Attack damage.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.AttackSpeedPercent",
+        "Value": 45.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000B3",
+    "Legacy_Id": "179",
+    "DisplayName": "Olmec Blue",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 185.0
+      },
+      {
+        "TagName": "Character.Stat.HealthPerTime",
+        "Value": 3.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000077F",
+    "Legacy_Id": "1919",
+    "DisplayName": "Oni Hunter's Garb",
+    "Description": "Passive: For each enemy god within 8.8m of you, gain a stack of 4% damage mitigation. This caps at 3 stacks.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 55.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 150.0
+      },
+      {
+        "TagName": "Character.Stat.MaxMana",
+        "Value": 250.0
+      },
+      {
+        "TagName": "Character.Stat.ManaPerTime",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000B4",
+    "Legacy_Id": "180",
+    "DisplayName": "Oracle Staff",
+    "Description": "Passive: When you get a Kill or Assist on an enemy god you instantly restore 25% of your Mana.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 20.0
+      },
+      {
+        "TagName": "Character.Stat.MaxMana",
+        "Value": 150.0
+      },
+      {
+        "TagName": "Character.Stat.ManaPerTime",
+        "Value": 1.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000000",
+    "Legacy_Id": "-1",
+    "DisplayName": "Parashu",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 55.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 300.0
+      },
+      {
+        "TagName": "Character.Stat.MaxMana",
+        "Value": 400.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000764",
+    "Legacy_Id": "1892",
+    "DisplayName": "Pendulum Blade",
+    "Description": "Active: Reduce your ability cooldowns by 3s. Cooldown: 50s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 60.0
+      },
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 15.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000769",
+    "Legacy_Id": "1897",
+    "DisplayName": "Phantom Ring",
+    "Description": "Active: You and allied gods within 6.4m become Immune to Impediments, allowing you to walk through player made walls for 6s. Cooldown: 60s",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 300.0
+      },
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 25.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000007A0",
+    "Legacy_Id": "1952",
+    "DisplayName": "Phantom Shell",
+    "Description": "Active: Shield yourself and allies within 5.6m for 100 Health + 15 per level for 4 seconds. Gods take 20% + 1% per level reduced damage from basic attacks and pass through players and player-made walls for the duration.  Cooldown: 120s.",
+    "Stats": []
+  },
+  {
+    "Item_Id": "000000000000000000000000000000B5",
+    "Legacy_Id": "181",
+    "DisplayName": "Pharaoh's Curse",
+    "Description": "Active: Enemies within 5.6m are affected by a 20% Slow and have 20% reduced Attack Speed for 6s. Cooldown: 60s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 40.0
+      },
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 40.0
+      },
+      {
+        "TagName": "Character.Stat.AttackSpeedPercent",
+        "Value": 15.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000B6",
+    "Legacy_Id": "182",
+    "DisplayName": "Phoenix Feather",
+    "Description": "Active: You are Healed for 300 HP + 30% of your Missing HP and deal True Damage equal to 3 * Your level + 10% of your Max Health from Items to enemies within 3.2m around you. Cooldown: 180s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 65.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 275.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000077E",
+    "Legacy_Id": "1918",
+    "DisplayName": "Prophetic Cloak",
+    "Description": "Passive: Once every 5s, when you damage an enemy god, you gain a stack of 1 Protections that corresponds to the type of damage that god deals.",
+    "Stats": []
+  },
+  {
+    "Item_Id": null,
+    "Legacy_Id": null,
+    "DisplayName": "",
+    "Description": "",
+    "Stats": []
+  },
+  {
+    "Item_Id": null,
+    "Legacy_Id": null,
+    "DisplayName": "",
+    "Description": "",
+    "Stats": []
+  },
+  {
+    "Item_Id": "000000000000000000000000000000B7",
+    "Legacy_Id": "183",
+    "DisplayName": "Polynomicon",
+    "Description": "Passive: When you use an ability you gain 65% of your Intelligence as bonus Magical Damage on your next basic attack.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 80.0
+      },
+      {
+        "TagName": "Character.Stat.MaxMana",
+        "Value": 200.0
+      },
+      {
+        "TagName": "Character.Stat.ManaPerTime",
+        "Value": 3.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000080D",
+    "Legacy_Id": "2061",
+    "DisplayName": "Avenging Blade",
+    "Description": "Passive: Damaging an enemy God with a basic attack while in the jungle slows their movement speed by 5% and reduces their protections by 5% for 3 seconds. Stacks up to 3 times.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 60.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 200.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000B8",
+    "Legacy_Id": "184",
+    "DisplayName": "Purification Beads",
+    "Description": "Active: You become CC Immune for 2s. Cooldown: 150s.",
+    "Stats": []
+  },
+  {
+    "Item_Id": "000000000000000000000000000000B9",
+    "Legacy_Id": "185",
+    "DisplayName": "Qin's Blade",
+    "Description": "Passive: Your basic attacks deal bonus Physical Damage to gods equal to 3.5% of their Max HP and an additional damage equal to 4% of the difference between the user's and target's Maximum Health.",
+    "Stats": []
+  },
+  {
+    "Item_Id": null,
+    "Legacy_Id": null,
+    "DisplayName": "",
+    "Description": "",
+    "Stats": []
+  },
+  {
+    "Item_Id": null,
+    "Legacy_Id": null,
+    "DisplayName": "",
+    "Description": "",
+    "Stats": []
+  },
+  {
+    "Item_Id": "00000000000000000000000000000E0E",
+    "Legacy_Id": "3598",
+    "DisplayName": "Reliquary",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.ManaPerTime",
+        "Value": 2.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000BA",
+    "Legacy_Id": "186",
+    "DisplayName": "Amanita Charm",
+    "Description": "Active: Create a Mushroom that Heals allied gods within 6.4m for 3.5% HP every 1s. Lasts for 5s. Cooldown: 60s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 25.0
+      },
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 15.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 300.0
+      },
+      {
+        "TagName": "Character.Stat.HealthPerTime",
+        "Value": 4.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000BB",
+    "Legacy_Id": "187",
+    "DisplayName": "Ring",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 5.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000BC",
+    "Legacy_Id": "188",
+    "DisplayName": "Ring of Dispel",
+    "Description": "Passive: Enemy gods hit by your Hard CC effects lose 10 Strength and 16 Intelligence for 4s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 20.0
+      },
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000E0F",
+    "Legacy_Id": "3599",
+    "DisplayName": "Rod Of Asclepius",
+    "Description": "Passive: Allies within 8.8m have 15% increased Healing.",
+    "Stats": []
+  },
+  {
+    "Item_Id": null,
+    "Legacy_Id": null,
+    "DisplayName": "",
+    "Description": "",
+    "Stats": []
+  },
+  {
+    "Item_Id": null,
+    "Legacy_Id": null,
+    "DisplayName": "",
+    "Description": "",
+    "Stats": []
+  },
+  {
+    "Item_Id": "00000000000000000000000000000000",
+    "Legacy_Id": "-1",
+    "DisplayName": "Rod Of Asclepius",
+    "Description": "Active: Send out a wave of living energy dealing 125 + 5 per level magic damage and marking enemy Gods for 6 seconds. The first Ally who damages a marked target will gain a shield and heal for 130 + 5 per level and consume the Mark. Kills and Assists will reduce the current cooldown by 20%. Cooldown 15s.",
+    "Stats": []
+  },
+  {
+    "Item_Id": "000000000000000000000000000000BD",
+    "Legacy_Id": "189",
+    "DisplayName": "Ruinous Ankh",
+    "Description": "Passive: Enemies within 8.8m have 40% reduced healing.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 40.0
+      },
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 40.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000BE",
+    "Legacy_Id": "190",
+    "DisplayName": "Ruinous Poison",
+    "Description": "Passive: Enemy gods hit by your basic attacks or abilities have 20% reduced healing for 4s.",
+    "Stats": []
+  },
+  {
+    "Item_Id": "00000000000000000000000000000777",
+    "Legacy_Id": "1911",
+    "DisplayName": "Ruinous Venom",
+    "Description": "Passive: Enemy gods hit by your basic attacks or abilities have 30% reduced healing for 4s.",
+    "Stats": []
+  },
+  {
+    "Item_Id": "000000000000000000000000000000BF",
+    "Legacy_Id": "191",
+    "DisplayName": "Rune",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 9.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000C0",
+    "Legacy_Id": "192",
+    "DisplayName": "Sabre",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.CritChance",
+        "Value": 7.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000776",
+    "Legacy_Id": "1910",
+    "DisplayName": "Sage's Ring",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 13.0
+      },
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000E10",
+    "Legacy_Id": "3600",
+    "DisplayName": "Sash",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.HealthPerTime",
+        "Value": 2.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000C1",
+    "Legacy_Id": "193",
+    "DisplayName": "Scepter of Dominion",
+    "Description": "Active: After 2s an area is created causing any gods that enter into it or are already within it to become affected by Stasis. Lasts for 2s. Cooldown: 90s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 30.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 200.0
+      },
+      {
+        "TagName": "Character.Stat.MaxMana",
+        "Value": 300.0
+      },
+      {
+        "TagName": "Character.Stat.ManaPerTime",
+        "Value": 3.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000C2",
+    "Legacy_Id": "194",
+    "DisplayName": "Screeching Gargoyle",
+    "Description": "Active: Enemy gods in front of you are Silenced for 2s and lose 20% Magical and Physical Protections for 4s. Cooldown: 90s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 60.0
+      },
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 20.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000C3",
+    "Legacy_Id": "195",
+    "DisplayName": "Scythe",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.LifeStealPercent",
+        "Value": 5.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000C4",
+    "Legacy_Id": "196",
+    "DisplayName": "Titan's Bane",
+    "Description": "Passive: You gain the Shattering effect, granting you 20% Penetration. This effect does not stack with itself.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 45.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000078B",
+    "Legacy_Id": "1931",
+    "DisplayName": "Serrated Edge",
+    "Description": "Passive: For every non-ultimate ability on cooldown you gain a stack of Cruelty. Each stack provides 10 Strength and 3% Lifesteal.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 40.0
+      },
+      {
+        "TagName": "Character.Stat.LifeStealPercent",
+        "Value": 15.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000C5",
+    "Legacy_Id": "197",
+    "DisplayName": "Shield",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 7.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000077D",
+    "Legacy_Id": "1917",
+    "DisplayName": "Shield of the Phoenix",
+    "Description": "Passive:  Anytime you hit an Enemy god with an ability you are healed for 2% of your maximum Health and Mana. This can only trigger once per ability.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 30.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 250.0
+      },
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000E11",
+    "Legacy_Id": "3601",
+    "DisplayName": "Shield Splitter",
+    "Description": "Active: Throw Shield Splitter 8.8m in front of you, dealing 40 + 5 per level True Damage to the first enemy god hit. If they have a Shield, it is reduced by 50% and you gain a Shield equal to the amount reduced. Cooldown: 15s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 40.0
+      },
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 25.0
+      },
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 25.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000000",
+    "Legacy_Id": "-1",
+    "DisplayName": "Shifter's Shield",
+    "Description": "Active: Activate to gain 15 Physical Protection and lose 15 Strength. Cooldown: 2s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 45.0
+      },
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 30.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000000",
+    "Legacy_Id": "-1",
+    "DisplayName": "Shifter's Shield",
+    "Description": "Active: Activate to gain 15 Strength and lose 15 Physical Protection. Cooldown: 2s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 30.0
+      },
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 45.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000076A",
+    "Legacy_Id": "1898",
+    "DisplayName": "Shifter's Shield",
+    "Description": "Passive: While over 75% Health, you gain 40 Strength and 40 Intelligence. While under 75% Health, you gain 20 Protections.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 20.0
+      },
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 20.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 150.0
+      },
+      {
+        "TagName": "Character.Stat.MaxMana",
+        "Value": 200.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000C6",
+    "Legacy_Id": "198",
+    "DisplayName": "Shogun's Ofuda",
+    "Description": "Passive: You and allies within 8.8m gain 20% Attack Speed.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 40.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 200.0
+      },
+      {
+        "TagName": "Character.Stat.AttackSpeedPercent",
+        "Value": 15.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000C7",
+    "Legacy_Id": "199",
+    "DisplayName": "Spectral Armor",
+    "Description": "Passive: Enemies within 8.8m lose 20% Attack Speed and 20% Critical Strike Chance.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 60.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 200.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000C8",
+    "Legacy_Id": "200",
+    "DisplayName": "Skeggox",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 25.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000C9",
+    "Legacy_Id": "201",
+    "DisplayName": "Soul Reaver",
+    "Description": "Passive: Enemy gods hit by your abilities take 10% of their Current HP as bonus Magical Damage over 2s. This effect will always deal at least 2.5% of the god's Max HP over time and only triggers once per ability per god.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 50.0
+      },
+      {
+        "TagName": "Character.Stat.MaxMana",
+        "Value": 300.0
+      },
+      {
+        "TagName": "Character.Stat.ManaPerTime",
+        "Value": 5.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000786",
+    "Legacy_Id": "1926",
+    "DisplayName": "Soul Gem",
+    "Description": "Passive: On successful hit of an Ability you gain 1 stack. At 3 Stacks your next Ability that damages an enemy God will deal bonus damage equal to 30% of your Intelligence to each God hit, and will heal yourself and allies within 3.2m for 15 +5 Per Level and will consume the 3 stacks.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 75.0
+      },
+      {
+        "TagName": "Character.Stat.LifeStealPercent",
+        "Value": 15.0
+      },
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000E12",
+    "Legacy_Id": "3602",
+    "DisplayName": "Soul Reliquary",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 20.0
+      },
+      {
+        "TagName": "Character.Stat.ManaPerTime",
+        "Value": 4.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000788",
+    "Legacy_Id": "1928",
+    "DisplayName": "Spear of Desolation",
+    "Description": "Passive: When you get a Kill or Assist on an enemy god your Non-ultimate Cooldowns are reduced by 1s and your Ultimate Cooldown is reduced by 5s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 90.0
+      },
+      {
+        "TagName": "Character.Stat.PhysicalPenetrationPercent",
+        "Value": 5.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000076B",
+    "Legacy_Id": "1899",
+    "DisplayName": "Sphere of Negation",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 70.0
+      },
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 100.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000783",
+    "Legacy_Id": "1923",
+    "DisplayName": "Spirit Robe",
+    "Description": "Passive: When you are hit by a Hard CC effect you gain 40 Physical Protection and 40 Magical Protection for 6s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 30.0
+      },
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 30.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000CA",
+    "Legacy_Id": "202",
+    "DisplayName": "The Cosmic Horror",
+    "Description": "Passive: If you have more than 275 Item Intelligence you gain 10 Cooldown Rate.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 90.0
+      },
+      {
+        "TagName": "Character.Stat.MaxMana",
+        "Value": 200.0
+      },
+      {
+        "TagName": "Character.Stat.ManaPerTime",
+        "Value": 3.0
+      },
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000076C",
+    "Legacy_Id": "1900",
+    "DisplayName": "Staff of Myrddin",
+    "Description": "Active: Your next non-Ultimate Ability used will have no cooldown. Cooldown: 150s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 80.0
+      },
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 15.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000CB",
+    "Legacy_Id": "203",
+    "DisplayName": "Stampede",
+    "Description": "Active: You and allied gods within 6.4m gain Slow Immunity, 20% Attack Speed, and a burst of 60% Movement Speed that decays to 20% over 6s for 6s. Cooldown: 90s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 55.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 200.0
+      },
+      {
+        "TagName": "Character.Stat.HealthPerTime",
+        "Value": 5.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000000",
+    "Legacy_Id": "-1",
+    "DisplayName": "Stone of Orcus",
+    "Description": "ACTIVE - You and Allies Gods within 6.4m gain Phantom (NOT IMPLEMENTED YET), 5 + 1*Level Strength, and 10 + 2*Level Intelligence for 4s. Cooldown: 60s",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 300.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000000",
+    "Legacy_Id": "-1",
+    "DisplayName": "Stormseeker",
+    "Description": "PASSIVE - When you hit an enemy god with a Basic Attack, gain a permanent stacking Attack Speed buff. Each stack grants 0.25% Attack Speed for a max of 999 stacks.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 30.0
+      },
+      {
+        "TagName": "Character.Stat.AttackSpeedPercent",
+        "Value": 20.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000CC",
+    "Legacy_Id": "204",
+    "DisplayName": "Sun Beam Bow",
+    "Description": "Active: Toggle to fire 2 ranged projectiles with each of your basic attacks. These travel 8.8m and deal 10 + 20% of your basic attack damage as magical damage. Item drains 5% max mana per second while active.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 25.0
+      },
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 25.0
+      },
+      {
+        "TagName": "Character.Stat.ManaPerTime",
+        "Value": 5.0
+      },
+      {
+        "TagName": "Character.Stat.AttackSpeedPercent",
+        "Value": 15.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000E13",
+    "Legacy_Id": "3603",
+    "DisplayName": "Survivor's Sash",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 15.0
+      },
+      {
+        "TagName": "Character.Stat.HealthPerTime",
+        "Value": 4.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000000",
+    "Legacy_Id": "-1",
+    "DisplayName": "Talaria",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 40.0
+      },
+      {
+        "TagName": "Character.Stat.MovementSpeed",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000CD",
+    "Legacy_Id": "205",
+    "DisplayName": "Emblem of Namaka",
+    "Description": "Active: You and allied gods within 6.4m gain a 100 + 12*Level HP Shield for 4s. Cooldown: 60s",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 230.0
+      },
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 15.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000CE",
+    "Legacy_Id": "206",
+    "DisplayName": "Talisman of Purification",
+    "Description": "Active: You and allied gods within 6.4m are Cleansed of all CC and gain CC Immunity for 1s. Cooldown: 180s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 45.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 200.0
+      },
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000E9",
+    "Legacy_Id": "233",
+    "DisplayName": "Tekko-Kagi",
+    "Description": "Passive: Every time you activate an ability that costs mana you gain 3% Movement Speed and 5 Cooldown Rate for 10s. Stacks up to 3 times.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 40.0
+      },
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 15.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000078A",
+    "Legacy_Id": "1930",
+    "DisplayName": "The Crusher",
+    "Description": "Passive: Enemies hit by your damaging Abilities take bonus damage equal to an additional 35% of your Strength over 1s. Subsequent hits on the same target do half the bonus damage for the next 3s.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 45.0
+      },
+      {
+        "TagName": "Character.Stat.PhysicalPenetrationPercent",
+        "Value": 10.0
+      },
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000CF",
+    "Legacy_Id": "207",
+    "DisplayName": "The Executioner",
+    "Description": "Passive: When you damage an enemy god or jungle boss with a basic attack, gain the Piercing effect, granting you 7.5% Penetration for 4s. Stacks up to 4 times.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 40.0
+      },
+      {
+        "TagName": "Character.Stat.AttackSpeedPercent",
+        "Value": 20.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000D0",
+    "Legacy_Id": "208",
+    "DisplayName": "Gauntlet of Thebes",
+    "Description": "Passive: Assists on a minion give 1 Stack and God kills and assists give 5 Stacks. Stacks provide 1 Physical Protection and 1 Magical Protection. Stacks up to 40 times. At max stacks this item evolves providing you an additional 10 of each Protection.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 150.0
+      },
+      {
+        "TagName": "Character.Stat.MaxMana",
+        "Value": 150.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000D1",
+    "Legacy_Id": "209",
+    "DisplayName": "The Reaper",
+    "Description": "Passive: When you damage an enemy god, you gain 5 Strength and 2.5% Lifesteal for 4s. Killing a god provides a stack, increasing the buff by another 5 Strength and 2.5% Lifesteal when triggered. Stacks up to 6 times.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 30.0
+      },
+      {
+        "TagName": "Character.Stat.LifeStealPercent",
+        "Value": 25.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000E8",
+    "Legacy_Id": "232",
+    "DisplayName": "The World Stone",
+    "Description": "Passive: Your Ultimate Cooldown is reduced by 20%.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 75.0
+      },
+      {
+        "TagName": "Character.Stat.MaxMana",
+        "Value": 150.0
+      },
+      {
+        "TagName": "Character.Stat.ManaPerTime",
+        "Value": 2.0
+      },
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 15.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000000",
+    "Legacy_Id": "-1",
+    "DisplayName": "Tide Jewel",
+    "Description": "PASSIVE - While above 75% Mana, you gain +10 Intelligence",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 25.0
+      },
+      {
+        "TagName": "Character.Stat.MaxMana",
+        "Value": 250.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000E2",
+    "Legacy_Id": "226",
+    "DisplayName": "Totem of Death",
+    "Description": "Passive: When you hit an enemy god or jungle boss with an ability, gain the Piercing effect, granting you 7.5% Penetration for 4s. Stacks up to 4 times.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 40.0
+      },
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 15.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000076D",
+    "Legacy_Id": "1901",
+    "DisplayName": "Transcendence",
+    "Description": "Passive: You permanently gain 7 Mana per Stack, and receive 1 Stack per 800 Damage Dealt to minions and Jungle Monsters, with damage to Gods counting double. You gain Strength equal to 2% of your Mana from items. At 50 stacks this item Evolves, gaining 10 Penetration.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 35.0
+      },
+      {
+        "TagName": "Character.Stat.MaxMana",
+        "Value": 400.0
+      },
+      {
+        "TagName": "Character.Stat.ManaPerTime",
+        "Value": 4.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000D2",
+    "Legacy_Id": "210",
+    "DisplayName": "Triton's Conch",
+    "Description": "Passive: You and allies within 8.8m gain 7 + 0.5*Level Strength and 10 + 1*Level Intelligence.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 20.0
+      },
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 45.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 300.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000076E",
+    "Legacy_Id": "1902",
+    "DisplayName": "Typhon's Fang",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 50.0
+      },
+      {
+        "TagName": "Character.Stat.LifeStealPercent",
+        "Value": 35.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000D3",
+    "Legacy_Id": "211",
+    "DisplayName": "Veve Charm",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 240.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000774",
+    "Legacy_Id": "1908",
+    "DisplayName": "Void Shard",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPenetrationPercent",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000780",
+    "Legacy_Id": "1920",
+    "DisplayName": "Void Shield",
+    "Description": "Passive: Enemies within 8.8m have their Physical Protections reduced by 15%",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 20.0
+      },
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 45.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 100.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000781",
+    "Legacy_Id": "1921",
+    "DisplayName": "Void Stone",
+    "Description": "Passive: Enemies within 8.8m have their Magical Protections reduced by 15%",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 40.0
+      },
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 45.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 150.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000ED",
+    "Legacy_Id": "237",
+    "DisplayName": "Sentry Ward",
+    "Description": "Active: Place a ward that reveals enemies and enemy wards within an 10.4m area. Lasts for 120s or until killed.",
+    "Stats": []
+  },
+  {
+    "Item_Id": "00000000000000000000000000000000",
+    "Legacy_Id": "-1",
+    "DisplayName": "Upgraded Ward",
+    "Description": "",
+    "Stats": []
+  },
+  {
+    "Item_Id": "000000000000000000000000000000D9",
+    "Legacy_Id": "217",
+    "DisplayName": "Vision Ward",
+    "Description": "Active: Place a ward that reveals enemies within an 10.4m area. Lasts for 120s or until killed. Can carry up to 2 of this item.",
+    "Stats": []
+  },
+  {
+    "Item_Id": "000000000000000000000000000000D4",
+    "Legacy_Id": "212",
+    "DisplayName": "Wish-Granting Pearl",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 120.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 500.0
+      },
+      {
+        "TagName": "Character.Stat.MaxMana",
+        "Value": 250.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000D5",
+    "Legacy_Id": "213",
+    "DisplayName": "Yogi's Necklace",
+    "Description": "Passive: Heal 0.5% of your Maximum Health every second.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 400.0
+      },
+      {
+        "TagName": "Character.Stat.MaxMana",
+        "Value": 300.0
+      },
+      {
+        "TagName": "Character.Stat.HealthPerTime",
+        "Value": 6.0
+      },
+      {
+        "TagName": "Character.Stat.ManaPerTime",
+        "Value": 6.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000D6",
+    "Legacy_Id": "214",
+    "DisplayName": "Circle of Protection",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 26.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000000D7",
+    "Legacy_Id": "215",
+    "DisplayName": "Zither",
+    "Description": "",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 12.0
+      },
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 20.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000079A",
+    "Legacy_Id": "1946",
+    "DisplayName": "Archmage's Gem",
+    "Description": "Passive: Your next ability that damages a god deals bonus Magical Damage equal to 40% your Intelligence. Cooldown: 20s. Requires Level 20.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 90.0
+      },
+      {
+        "TagName": "Character.Stat.MaxMana",
+        "Value": 150.0
+      },
+      {
+        "TagName": "Character.Stat.ManaPerTime",
+        "Value": 4.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000079F",
+    "Legacy_Id": "1951",
+    "DisplayName": "Bluestone Brooch",
+    "Description": "Passive: Enemies hit by your damaging Abilities take an additional 120 Physical Damage over 2s. Gods take additional damage equal to 7.5% of their current health. Subsequent hits on the same target do half the bonus damage for the next 3s. Requires Level 20.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 30.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 200.0
+      },
+      {
+        "TagName": "Character.Stat.HealthPerTime",
+        "Value": 7.0
+      },
+      {
+        "TagName": "Character.Stat.ManaPerTime",
+        "Value": 5.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000795",
+    "Legacy_Id": "1941",
+    "DisplayName": "Bluestone Pendant",
+    "Description": "Passive: Enemies hit by your damaging Abilities take an additional 32 Physical Damage over 2s. Subsequent hits on the same target do half the bonus damage for the next 3s. Requires level 20 to upgrade.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 15.0
+      },
+      {
+        "TagName": "Character.Stat.HealthPerTime",
+        "Value": 2.5
+      },
+      {
+        "TagName": "Character.Stat.ManaPerTime",
+        "Value": 2.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000790",
+    "Legacy_Id": "1936",
+    "DisplayName": "Bumba's Cudgel",
+    "Description": "Passive: If you have more Intelligence than Strength from items, gain 20 INT, otherwise, gain 15 STR. Your Basic Attacks deal +50 True Damage and your Abilities deal +50% Damage versus Jungle Monsters, but you deal -25% Damage to Minions from all sources. After casting an ability your next Basic Attack deals an additional 20 True Damage. hitting this basic attack reduces your active cooldowns by 0.5s. Requires level 20 to upgrade.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 50.0
+      },
+      {
+        "TagName": "Character.Stat.MaxMana",
+        "Value": 50.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000078F",
+    "Legacy_Id": "1935",
+    "DisplayName": "Bumba's Golden Dagger",
+    "Description": "Passive: If you have more Intelligence than Strength from items, gain 20 INT, otherwise, gain 15 STR. Your Basic Attacks deal +50 True Damage and your Abilities deal +50% Damage versus Jungle Monsters, but you deal -25% Damage to Minions from all sources. Basic attacks deal 15% bonus Physical Damage to non-minion enemies within 1.5m of the target. Requires level 20 to upgrade.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 50.0
+      },
+      {
+        "TagName": "Character.Stat.MaxMana",
+        "Value": 50.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000799",
+    "Legacy_Id": "1945",
+    "DisplayName": "Bumba's Hammer",
+    "Description": "Passive: If you have more Intelligence than Strength from items, gain 60 INT, otherwise, gain 35 STR. Your Basic Attacks deal +75 True Damage and your Abilities deal +50% damage against Jungle Camps, Structures, and Jungle Bosses. After casting an ability your next Basic Attack deals an additional 40 True Damage. hitting this basic attack reduces your active cooldowns by 0.75s and you are healed for 60 health. Requires Level 20.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 200.0
+      },
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000798",
+    "Legacy_Id": "1944",
+    "DisplayName": "Bumba's Spear",
+    "Description": "Passive: If you have more Intelligence than Strength from items, gain 60 INT, otherwise, gain 35 STR. Your Basic Attacks deal +75 True Damage and your Abilities deal +50% damage against Jungle Camps, Structures, and Jungle Bosses. When any of these die you gain a 10% Strength and Intelligence buff for 30s and are healed for 10% of your Health, 10% of your Mana. Requires Level 20.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 20.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000791",
+    "Legacy_Id": "1937",
+    "DisplayName": "Conduit Gem",
+    "Description": "Passive: Every 0.5 seconds you gain a stack. Your next damaging ability deals 3 True Damage per stack (half for gods) and removes all stacks. Stacks up to 20 Times. Requires level 20 to upgrade.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 25.0
+      },
+      {
+        "TagName": "Character.Stat.MaxMana",
+        "Value": 100.0
+      },
+      {
+        "TagName": "Character.Stat.ManaPerTime",
+        "Value": 1.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000079C",
+    "Legacy_Id": "1948",
+    "DisplayName": "Death's Embrace",
+    "Description": "Passive: Hitting an enemy with a Basic Attack restores 1.4% of your Health, 2% of your Mana and reduces your active non-Ultimate Cooldowns by 0.33s. Requires Level 20.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 35.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 150.0
+      },
+      {
+        "TagName": "Character.Stat.LifeStealPercent",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000793",
+    "Legacy_Id": "1939",
+    "DisplayName": "Death's Toll",
+    "Description": "Passive: Hitting an enemy with a Basic Attack Heals you for 2 +0.3% of your Max Health and 1 +1% of your Max Mana. Requires level 20 to upgrade.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 15.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 100.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000E85",
+    "Legacy_Id": "3717",
+    "DisplayName": "Gilded Arrow",
+    "Description": "Passive: Every 8s the highest health enemy minion or jungle monster within 12.8m of you is marked. If you secure the killing blow on that target you gain 4 bonus gold and 25% attack speed for 8s, and restore 30 Mana. Requires level 20 to upgrade.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.InhandPower",
+        "Value": 25.0
+      },
+      {
+        "TagName": "Character.Stat.LifeStealPercent",
+        "Value": 8.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000E86",
+    "Legacy_Id": "3718",
+    "DisplayName": "Sharpshooter's Arrow",
+    "Description": "Passive: All sources of Gold Gain are increased by 5%. Basic Attack Damage is increased by 20% when hitting a target over 7.5m away.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.InhandPower",
+        "Value": 60.0
+      },
+      {
+        "TagName": "Character.Stat.AttackSpeedPercent",
+        "Value": 10.0
+      },
+      {
+        "TagName": "Character.Stat.LifeStealPercent",
+        "Value": 15.0
+      },
+      {
+        "TagName": "Character.Stat.CritChance",
+        "Value": 15.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000796",
+    "Legacy_Id": "1942",
+    "DisplayName": "Heroism",
+    "Description": "Passive: You gain 1 bonus Gold per second. When an ally god within 8.8m of you is hit by a hard crowd control effect, give them a shield equal to 15% of your Maximum Health. This effect can only occur once every 15s. Requires Level 15.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 30.0
+      },
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 30.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 200.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000794",
+    "Legacy_Id": "1940",
+    "DisplayName": "Leather Cowl",
+    "Description": "Passive: While you are within 8.8m of an allied god you gain 10% Attack Speed. If you are alone you instead gain 5% Movement Speed. Requires level 20 to upgrade.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 10.0
+      },
+      {
+        "TagName": "Character.Stat.AttackSpeedPercent",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000079D",
+    "Legacy_Id": "1949",
+    "DisplayName": "Hunter's Cowl",
+    "Description": "Passive: While you are within 8.8m of an allied god you gain 20% Attack Speed Aura. If you are alone you instead gain 10% Movement Speed. Requires Level 20.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 35.0
+      },
+      {
+        "TagName": "Character.Stat.AttackSpeedPercent",
+        "Value": 25.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000792",
+    "Legacy_Id": "1938",
+    "DisplayName": "Sands Of Time",
+    "Description": "Passive: This item grants 0.6 Mana per second per 10% of your missing Mana. Your damaging abilities deal an extra 10 true damage to minions. Requires level 20 to upgrade.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 20.0
+      },
+      {
+        "TagName": "Character.Stat.ManaPerTime",
+        "Value": 2.0
+      },
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000079B",
+    "Legacy_Id": "1947",
+    "DisplayName": "Pendulum Of The Ages",
+    "Description": "Passive: This item grants 4 Mana per second per 10% of your missing Mana. This item grants 7 Intelligence per 10% of your available Mana.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.MagicalPower",
+        "Value": 70.0
+      },
+      {
+        "TagName": "Character.Stat.ManaPerTime",
+        "Value": 4.0
+      },
+      {
+        "TagName": "Character.Stat.CooldownReductionPercent",
+        "Value": 20.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000078D",
+    "Legacy_Id": "1933",
+    "DisplayName": "Selflessness",
+    "Description": "Passive: Getting the assist for an enemy minion or jungle monster dying will provide 8 Bonus gold and restore 8 Health and 5 Mana. When an ally god within 8.8m of you is hit by a hard crowd control effect, give them a shield equal to 8% of your Maximum Health. This effect can only occur once every 30s. Requires level 15 to upgrade.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 10.0
+      },
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 10.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 60.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "000000000000000000000000000003F5",
+    "Legacy_Id": "1013",
+    "DisplayName": "Warrior's Axe",
+    "Description": "Passive: Damaging an enemy god deals 40 +2 per level True damage and restores 20 +1 per level Health. This effect can only hit one god per activation. 10s Cooldown. Requires level 20 to upgrade.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 10.0
+      },
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 10.0
+      },
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000079E",
+    "Legacy_Id": "1950",
+    "DisplayName": "Sundering Axe",
+    "Description": "Passive: Damaging an enemy god deals 150 +10% Of your Protections from Items True damage and restores 100 Health. This effect can only hit one god per activation. 10s Cooldown. Requires Level 20.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalPower",
+        "Value": 30.0
+      },
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 30.0
+      },
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 30.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000797",
+    "Legacy_Id": "1943",
+    "DisplayName": "War Banner",
+    "Description": "Passive: You gain 1 bonus Gold per second. Getting the assist for an enemy minion or jungle monster will restore 1% Health and 1.25% mana to you and allied gods within 8.8m, and also also apply buff that gives 2% Movement Speed and 4% Attack Speed for 10. Stacks up to 10 times. Requires Level 15.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 30.0
+      },
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 30.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 200.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "0000000000000000000000000000078E",
+    "Legacy_Id": "1934",
+    "DisplayName": "War Flag",
+    "Description": "Passive: Getting the assist for an enemy minion or jungle monster dying will provide 8 Bonus gold and restore 8 Health and 5 Mana. You and allied gods within 8.8m also receive a buff that gives 0.25% Movement Speed and 0.5% Attack Speed for 10s. Stacks up to 10 times. Requires level 15 to upgrade.",
+    "Stats": [
+      {
+        "TagName": "Character.Stat.PhysicalProtection",
+        "Value": 10.0
+      },
+      {
+        "TagName": "Character.Stat.MagicalProtection",
+        "Value": 10.0
+      },
+      {
+        "TagName": "Character.Stat.MaxHealth",
+        "Value": 60.0
+      }
+    ]
+  },
+  {
+    "Item_Id": "00000000000000000000000000000000",
+    "Legacy_Id": "-1",
+    "DisplayName": "Dagger Of Frenzy Listener",
+    "Description": "",
+    "Stats": []
+  },
+  {
+    "Item_Id": "00000000000000000000000000000000",
+    "Legacy_Id": "-1",
+    "DisplayName": "Eye Of Providence Listener",
+    "Description": "",
+    "Stats": []
+  }
+]

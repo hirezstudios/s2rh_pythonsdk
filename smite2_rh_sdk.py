@@ -390,14 +390,21 @@ class Smite2RallyHereSDK:
         max_matches: int = 100
     ) -> list:
         """
-        SMITE 2–specific version of fetching match data by player UUID,
-        then transforming it into a more SMITE 2–friendly structure.
+        SMITE 2–specific version of fetching match data by player UUID.
+        After fetching, transforms each record so it's SMITE 2–friendly,
+        then runs _enrich_matches_with_item_data to replace item IDs.
         """
         token = self._get_env_access_token()
-        rh_matches = self.rh_fetch_matches_by_player_uuid(
-            player_uuid, token, page_size, max_matches
-        )
-        return self.S2_transform_matches(rh_matches)
+        rh_matches = self.rh_fetch_matches_by_player_uuid(player_uuid, token, page_size, max_matches)
+
+        # Transform the raw RallyHere data into SMITE 2–friendly structures.
+        # This likely returns a list of "player" dicts, each with 'items'.
+        s2_players = self.S2_transform_matches(rh_matches)
+
+        # Now unify the item data (handling the "player-based" shape).
+        s2_players = self._enrich_matches_with_item_data(s2_players)
+
+        return s2_players
 
     def S2_transform_matches_by_instance(self, rh_matches: list) -> list:
         """
@@ -453,7 +460,83 @@ class Smite2RallyHereSDK:
 
             s2_matches.append(s2_match)
 
+        # NEW: After building s2_matches, enrich items with full data:
+        s2_matches = self._enrich_matches_with_item_data(s2_matches)
+
         return s2_matches
+
+    def _enrich_matches_with_item_data(self, s2_data: list) -> list:
+        """
+        For each entity (match record or player record) in s2_data, go through
+        and replace the 'items' IDs with full item data from items.json.
+        
+        Detects if we have an "instance-based" shape with segments/final_players,
+        or if each element is an individual player record with 'items'.
+        """
+        item_map = self._load_items_map()
+
+        if not s2_data:
+            return s2_data
+
+        first = s2_data[0]
+        if isinstance(first, dict):
+            # If it has segments/final_players, assume instance-based match shape
+            if "segments" in first and "final_players" in first:
+                for match in s2_data:
+                    # handle top-level players
+                    for player in match.get("final_players", []):
+                        self._replace_item_ids(player, item_map)
+                    # handle segment-based players
+                    for segment in match.get("segments", []):
+                        for player in segment.get("players", []):
+                            self._replace_item_ids(player, item_map)
+            else:
+                # Otherwise, assume it's a list of player records (player-based shape).
+                for player_record in s2_data:
+                    self._replace_item_ids(player_record, item_map)
+
+        return s2_data
+
+    def _replace_item_ids(self, player: dict, item_map: dict) -> None:
+        """
+        Given a single player's dictionary, replace each item ID in player["items"]
+        with a fully described item node from the item_map, if found. Otherwise,
+        provide a fallback item structure.
+        """
+        items_dict = player.get("items", {})
+        for slot_key, item_id in list(items_dict.items()):
+            # If the item ID is in our map, replace the string ID with the full item data
+            if item_id in item_map:
+                items_dict[slot_key] = item_map[item_id]
+            else:
+                # Provide a lightweight fallback structure with placeholder display name
+                items_dict[slot_key] = {
+                    "Item_Id": item_id,
+                    "DisplayName": "<display name missing>"
+                }
+
+    def _load_items_map(self) -> dict:
+        """
+        Load items.json from disk, creating a dictionary mapping
+        Item_Id -> item data object.
+        """
+        # Adjust this path to wherever your items.json file lives:
+        items_json_path = os.path.join(os.path.dirname(__file__), "items.json")
+
+        try:
+            with open(items_json_path, "r", encoding="utf-8") as f:
+                items_data = json.load(f)
+        except Exception as e:
+            print(f"Error loading items.json: {e}")
+            return {}
+
+        # Build a map of { "0000000000000000000000000000009F": {...full item data...}, ... }
+        item_map = {}
+        for item_obj in items_data:
+            item_id = item_obj.get("Item_Id")
+            if item_id:
+                item_map[item_id] = item_obj
+        return item_map
 
     def S2_fetch_matches_by_instance(
         self,
@@ -477,11 +560,20 @@ class Smite2RallyHereSDK:
 
     def S2_fetch_player_stats(self, player_uuid: str) -> list:
         """
-        Fetch RallyHere per-match player stats, transform them into SMITE 2 format.
+        Fetch RallyHere per-match player stats, transform them into SMITE 2 format,
+        then replace each Item ID with full item data if possible.
         """
         token = self._get_env_access_token()
         raw_stats = self.rh_fetch_player_stats(player_uuid, token)
-        return self.S2_transform_player_stats(raw_stats)
+
+        # Transform the raw stats into SMITE 2 form:
+        s2_player_stats = self.S2_transform_player_stats(raw_stats)
+
+        # Now unify the item data. This will detect that each element is a 
+        # "player record" and replace item IDs with full item details.
+        s2_player_stats = self._enrich_matches_with_item_data(s2_player_stats)
+
+        return s2_player_stats
 
     # -------------------------------------------------------------------------
     # DEV API: Developer Token & Methods
