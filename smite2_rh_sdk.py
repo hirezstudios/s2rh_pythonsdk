@@ -107,12 +107,12 @@ class Smite2RallyHereSDK:
 
         return matches[:max_matches]
 
-    def rh_fetch_player_stats(self, player_uuid: str, token: str) -> list:
+    def rh_fetch_player_stats(self, player_uuid: str, token: str) -> dict:
         """
-        Fetch raw player stats (per-match) from RallyHere.
-        Returns a list of dictionaries, each containing 'custom_data' for a match.
+        Fetch raw player stats from RallyHere using the /stats endpoint
+        instead of /match. Returns the raw stats data as a dictionary.
         """
-        url = f"{self.env_base_url}/match/v1/player/{player_uuid}/match"
+        url = f"{self.env_base_url}/match/v1/player/{player_uuid}/stats"
         headers = {
             'Accept': 'application/json',
             'Authorization': f'Bearer {token}'
@@ -120,7 +120,7 @@ class Smite2RallyHereSDK:
         response = requests.get(url, headers=headers)
         response.raise_for_status()
         data = response.json()
-        return data.get("player_matches", [])
+        return data
 
     def rh_fetch_matches_by_instance(
         self,
@@ -551,29 +551,79 @@ class Smite2RallyHereSDK:
         rh_matches = self.rh_fetch_matches_by_instance(instance_id, token, page_size)
         return self.S2_transform_matches_by_instance(rh_matches)
 
-    def S2_transform_player_stats(self, raw_stats: list) -> list:
+    def S2_fetch_player_stats(self, player_uuid: str) -> dict:
         """
-        Convert each entry in raw_stats (each presumably a "player in match") 
-        into SMITE 2 form, reusing the S2_transform_player logic.
-        """
-        return [self.S2_transform_player(entry) for entry in raw_stats]
-
-    def S2_fetch_player_stats(self, player_uuid: str) -> list:
-        """
-        Fetch RallyHere per-match player stats, transform them into SMITE 2 format,
-        then replace each Item ID with full item data if possible.
+        Fetch the (simplified) player stats from RallyHere in 'S2' form.
+        Since the stats endpoint returns minimal fields (e.g., {"total_matches_played": 735}),
+        we simply return the raw dictionary from rh_fetch_player_stats.
         """
         token = self._get_env_access_token()
         raw_stats = self.rh_fetch_player_stats(player_uuid, token)
+        return raw_stats
 
-        # Transform the raw stats into SMITE 2 form:
-        s2_player_stats = self.S2_transform_player_stats(raw_stats)
+    def S2_fetch_full_player_data_by_displayname(
+        self,
+        platform: str,
+        display_name: str,
+        max_matches: int = 100
+    ) -> dict:
+        """
+        Fetch a consolidated JSON for a player's data by display name (and platform).
+        1) Calls rh_fetch_player_with_displayname (including linked portals).
+        2) Collects all player UUIDs from that data.
+        3) Fetches match history (S2_fetch_matches_by_player_uuid) and stats (S2_fetch_player_stats).
+        4) Returns a simplified JSON blob with:
+           {
+               "PlayerInfo": {...},       # raw "lookup" JSON
+               "PlayerStats": [          # array of {"player_uuid": ..., "stats": {...}}
+                   {"player_uuid": "...", "stats": {...}}
+               ],
+               "MatchHistory": [...]     # array of match records
+           }
+        """
+        token = self._get_env_access_token()
 
-        # Now unify the item data. This will detect that each element is a 
-        # "player record" and replace item IDs with full item details.
-        s2_player_stats = self._enrich_matches_with_item_data(s2_player_stats)
+        # 1) Get the base "player info" data (including linked portals).
+        player_info = self.rh_fetch_player_with_displayname(
+            token=token,
+            display_names=[display_name],
+            platform=platform,
+            include_linked_portals=True
+        )
 
-        return s2_player_stats
+        # 2) Gather all player_uuids (including linked portals).
+        all_player_uuids = set()
+        for display_name_dict in player_info.get("display_names", []):
+            for _, player_array in display_name_dict.items():
+                for player_obj in player_array:
+                    main_uuid = player_obj.get("player_uuid")
+                    if main_uuid:
+                        all_player_uuids.add(main_uuid)
+                    for lp in player_obj.get("linked_portals", []):
+                        lp_uuid = lp.get("player_uuid")
+                        if lp_uuid:
+                            all_player_uuids.add(lp_uuid)
+
+        # 3) Build the return structure.
+        combined_data = {
+            "PlayerInfo": player_info,
+            "PlayerStats": [],
+            "MatchHistory": []
+        }
+
+        # 4) For each UUID found, fetch S2 stats & match history, accumulate in combined_data.
+        for uuid_val in all_player_uuids:
+            stats_data = self.S2_fetch_player_stats(uuid_val)
+            matches_data = self.S2_fetch_matches_by_player_uuid(uuid_val, max_matches=max_matches)
+
+            # store stats keyed to the player's UUID
+            combined_data["PlayerStats"].append({
+                "player_uuid": uuid_val,
+                "stats": stats_data
+            })
+            combined_data["MatchHistory"].extend(matches_data)
+
+        return combined_data
 
     # -------------------------------------------------------------------------
     # DEV API: Developer Token & Methods
@@ -777,13 +827,13 @@ class Smite2RallyHereSDK:
         # The base_result typically looks like:
         # {
         #   "display_names": [
-        #     { "Weak3n": [
-        #         { "player_id": 123, "player_uuid": "..." },
-        #         ...
-        #       ]
-        #     }
-        #   ]
-        # }
+        #       { "Weak3n": [
+        #           { "player_id": 123, "player_uuid": "..." },
+        #           ...
+        #         ]
+        #       }
+        #     ]
+        #   }
         # We'll iterate over each player, call /v1/player/{player_id}/linked_portals, 
         # and attach that field to the entry in base_result.
 
@@ -973,4 +1023,118 @@ class Smite2RallyHereSDK:
         Saves 'data' (Python object) as JSON into a specified file.
         """
         with open(filename, 'w') as file:
-            json.dump(data, file, indent=2) 
+            json.dump(data, file, indent=2)
+
+    def s2_summarize_builds_by_player_with_displayname(
+        self,
+        platform: str,
+        display_name: str,
+        max_matches_per_player: int = 300
+    ) -> dict:
+        """
+        Summarizes popular item builds by god for a given player (looked up by Display Name + Platform),
+        also including that player's linked portals. Essentially:
+          1) Look up the player(s) in rh_fetch_player_with_displayname_linked
+          2) Gather all player_uuid entries (including linked_portals)
+          3) For each UUID, fetch up to max_matches_per_player worth of match data
+          4) Summarize, by god, the frequency of each item build used
+          5) Return a JSON-friendly structure describing the top item builds for each god.
+        """
+
+        # 1) Look up the player data from rh_fetch_player_with_displayname_linked
+        token = self._get_env_access_token()
+        player_data = self.rh_fetch_player_with_displayname(
+            token=token,
+            display_names=[display_name],
+            platform=platform,
+            include_linked_portals=True
+        )
+
+        # We'll gather each unique player_uuid
+        all_player_uuids = set()
+
+        # The structure from rh_fetch_player_with_displayname_linked is typically:
+        # {
+        #   "display_names": [
+        #       {
+        #           "SomeDisplayName": [
+        #               { "player_id": X, "player_uuid": "...", "linked_portals": [...], ... },
+        #               ...
+        #           ]
+        #       }
+        #   ]
+        # }
+        for display_name_obj in player_data.get("display_names", []):
+            # display_name_obj might look like { "Weak3n": [ {...}, {...} ] }
+            for _, player_array in display_name_obj.items():
+                for p_obj in player_array:
+                    main_uuid = p_obj.get("player_uuid")
+                    if main_uuid:
+                        all_player_uuids.add(main_uuid)
+                    # Also check linked portals
+                    linked_portals = p_obj.get("linked_portals", [])
+                    for lp in linked_portals:
+                        lp_uuid = lp.get("player_uuid")
+                        if lp_uuid:
+                            all_player_uuids.add(lp_uuid)
+
+        # If we found no UUIDs, return an empty summary
+        if not all_player_uuids:
+            return {"error": "No associated player_uuid found for that display name + platform."}
+
+        # 2) For each player_uuid, fetch up to max_matches worth of match data
+        all_matches = []
+        for uuid_value in all_player_uuids:
+            # s2_fetch_matches_by_player_uuid returns a list of player-based records
+            # (each record includes "items", "god_name", etc.).
+            player_matches = self.S2_fetch_matches_by_player_uuid(
+                uuid_value,
+                max_matches=max_matches_per_player
+            )
+            all_matches.extend(player_matches)
+
+        # 3) Summarize the item builds by god
+        builds_by_god = {}
+        for m in all_matches:
+            # Each record includes a 'god_name', 'items', etc.
+            god_name = m.get("god_name", "UnknownGod")
+            items = m.get("items", {})
+
+            # Convert items to a sorted tuple of item names/IDs (or display names).
+            # Sorting ensures that build order doesn't matter, but set logic remains consistent.
+            # Alternatively, you could keep them in the actual equip order if you prefer.
+            # Here, we'll take the item map's "Item_Id" or "DisplayName".
+            # For demonstration, let's just grab a sorted list of the display names if available:
+            build_list = []
+            for slot_key in sorted(items.keys()):
+                item_info = items[slot_key]
+                if isinstance(item_info, dict):
+                    # Typically something like { "Item_Id": "...", "DisplayName": "..." }
+                    build_list.append(item_info.get("DisplayName", item_info.get("Item_Id", "UnknownItem")))
+                else:
+                    # fallback if it's just a string
+                    build_list.append(str(item_info))
+            build_tuple = tuple(build_list)
+
+            if god_name not in builds_by_god:
+                builds_by_god[god_name] = {}
+
+            # If we haven't seen this build yet, initialize
+            builds_by_god[god_name].setdefault(build_tuple, 0)
+            builds_by_god[god_name][build_tuple] += 1
+
+        # 4) Convert builds_by_god to a final structure listing each god's popular builds
+        # e.g., { "god_name": [{ "build": [...], "count": N }, ...] }
+        result = {}
+        for god, builds_dict in builds_by_god.items():
+            builds_list = []
+            for build_tup, usage_count in builds_dict.items():
+                builds_list.append({
+                    "build": list(build_tup),
+                    "count": usage_count
+                })
+            # Sort them by usage descending
+            builds_list.sort(key=lambda x: x["count"], reverse=True)
+            result[god] = builds_list
+
+        return result

@@ -1,0 +1,287 @@
+/* ------------------------------------------------------------------
+   Global/Body Fonts & Base
+   ------------------------------------------------------------------ */
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4; /* Light background for the page */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+               Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans",
+               "Helvetica Neue", Arial, sans-serif;
+  color: #333; /* Dark text on light background for clarity */
+  line-height: 1.5;
+}
+
+/* ------------------------------------------------------------------
+   Main Container
+   ------------------------------------------------------------------ */
+.container {
+  width: 95%;
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 24px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+h1 {
+  margin-top: 0;
+  margin-bottom: 24px;
+  font-weight: 600;
+  text-align: center;
+  color: #444; /* Slightly darker than #333 for headings */
+}
+
+/* ------------------------------------------------------------------
+   Controls & Selections
+   ------------------------------------------------------------------ */
+.controls,
+.god-selection {
+  display: flex;
+  flex-wrap: wrap; /* allows wrapping on smaller screens */
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.controls label,
+.god-selection label {
+  font-weight: 500;
+  white-space: nowrap;
+  color: #333;
+}
+
+#platformSelect,
+#displayNameInput,
+#maxMatchesInput,
+#godListSelect {
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: #333;
+  background-color: #fff;
+  outline: none;
+  transition: border-color 0.2s;
+}
+#platformSelect:focus,
+#displayNameInput:focus,
+#maxMatchesInput:focus,
+#godListSelect:focus {
+  border-color: #999;
+}
+
+/* ------------------------------------------------------------------
+   Buttons
+   ------------------------------------------------------------------ */
+#fetchDataBtn,
+#showGodInfoBtn,
+button {
+  padding: 6px 14px;
+  font-size: 0.9rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fafafa;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  color: #333;
+}
+#fetchDataBtn:hover,
+#showGodInfoBtn:hover,
+button:hover {
+  background: #f2f2f2;
+  border-color: #bbb;
+}
+button[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ------------------------------------------------------------------
+   Spinner & Status Message
+   ------------------------------------------------------------------ */
+.spinner {
+  display: flex;
+  align-items: center;
+}
+.spinner-inner {
+  width: 16px;
+  height: 16px;
+  border: 3px solid #ccc;
+  border-top: 3px solid #666;
+  border-radius: 50%;
+  margin-right: 8px;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.status-message {
+  margin-left: 10px;
+  color: #666;
+  font-style: italic;
+}
+
+/* ------------------------------------------------------------------
+   Main Results Sections
+   ------------------------------------------------------------------ */
+.results {
+  margin-top: 24px;
+}
+.data-section {
+  margin: 1.5em 0;
+  padding: 1em;
+  background-color: #fafafa;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+/* Stats Boxes */
+.stats-box {
+  margin-bottom: 0.75em;
+  padding: 0.75em;
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+}
+
+/* ------------------------------------------------------------------
+   Tables
+   ------------------------------------------------------------------ */
+.pro-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1em;
+  font-size: 0.9rem;
+  color: #333;
+}
+.pro-table thead tr {
+  background-color: #f0f0f0;
+  text-align: left;
+}
+.pro-table th,
+.pro-table td {
+  padding: 0.6em 0.8em;
+  border-bottom: 1px solid #ddd;
+}
+.pro-table tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+/* ------------------------------------------------------------------
+   Build Cards - Summaries & Items
+   ------------------------------------------------------------------ */
+.build-card {
+  border: 1px solid #ddd;
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  background: #fefefe;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.build-card:hover {
+  background: #f9f9f9;
+  box-shadow: 0 0 5px rgba(0,0,0,0.06);
+}
+.build-card h4 {
+  margin: 0 0 8px 0;
+  font-weight: 600;
+  color: #444;
+}
+/* Item list in build cards */
+.item-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.item {
+  display: inline-block;
+  padding: 4px 6px;
+  background: #e8e8e8;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  position: relative;
+  transition: background 0.2s, color 0.2s;
+  cursor: default;
+  color: #333;
+}
+.item:hover {
+  background: #ddd;
+}
+.item:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+.tooltip {
+  position: absolute;
+  bottom: 130%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #000; /* black background for contrast */
+  color: #fff;
+  padding: 8px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  font-size: 0.85rem;  /* slightly bigger if we have more text */
+  max-width: 220px;    /* optional max width for wrapping */
+  text-align: left;    /* left align for multiline content */
+}
+
+/* (2) Let the tooltip content wrap lines instead of forcing single-line */
+.tooltip {
+  white-space: normal; /* allow line wrapping */
+  line-height: 1.3;
+}
+
+/* (3) Item title, description, and stats in the tooltip */
+.item-title {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 4px;
+}
+.item-desc {
+  font-style: italic;
+  margin-bottom: 4px;
+}
+.item-stats {
+  margin: 0;
+  padding-left: 1.2em;
+}
+.item-stats li {
+  list-style-type: disc;
+  margin-bottom: 2px;
+}
+
+/* optionally you can style the bullet color:
+.item-stats li {
+  list-style: disc outside;
+  margin-left: 0.5em;
+}
+*/
+
+/* ------------------------------------------------------------------
+   Responsive Adjustments
+   ------------------------------------------------------------------ */
+@media (max-width: 600px) {
+  .controls,
+  .god-selection {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .controls label,
+  .god-selection label {
+    margin-bottom: 4px;
+  }
+  #statusMessage {
+    margin-top: 5px;
+  }
+  .build-card {
+    padding: 12px;
+  }
+} 

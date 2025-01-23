@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SMITE 2 - Pro Builds Viewer</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+  <h1>SMITE 2 - Pro Player Data Viewer</h1>
+
+  <!-- Platform & Display Name Selection -->
+  <section class="controls">
+    <label for="platformSelect">Platform:</label>
+    <select id="platformSelect">
+      <option value="Steam">Steam</option>
+      <option value="XboxLive">XboxLive</option>
+      <option value="PSN">PSN</option>
+      <option value="Epic">Epic</option>
+    </select>
+
+    <label for="displayNameInput">Display Name:</label>
+    <input type="text" id="displayNameInput" placeholder="Weak3n" />
+
+    <!-- (NEW) An input for max_matches. Defaults to '10' within 1-300 range -->
+    <label for="maxMatchesInput">Max Matches (1-300):</label>
+    <input type="number" id="maxMatchesInput" min="1" max="300" value="10" />
+
+    <button id="fetchDataBtn">Fetch Full Data</button>
+    <div id="loadingSpinner" style="display: none;" class="spinner">
+      <div class="spinner-inner"></div>
+      <span>Loading...</span>
+    </div>
+    <div id="statusMessage" class="status-message"></div>
+  </section>
+
+  <!-- New sections to display data from S2_fetch_full_player_data_by_displayname -->
+  <section id="playerInfoSection" class="data-section" style="display:none;">
+    <h2>Player Info</h2>
+    <div id="playerInfoContainer"></div>
+  </section>
+
+  <section id="playerStatsSection" class="data-section" style="display:none;">
+    <h2>Overall Stats</h2>
+    <div id="playerStatsContainer"></div>
+  </section>
+
+  <section id="matchHistorySection" class="data-section" style="display:none;">
+    <h2>Match History</h2>
+    <div id="matchHistoryContainer"></div>
+  </section>
+
+  <!-- (Optional) Build Summaries -->
+  <section id="buildSummarySection" class="data-section" style="display:none;">
+    <h2>Item Builds Summary</h2>
+    <div id="buildSummaryContainer"></div>
+  </section>
+
+  <!-- God Selection -->
+  <section class="god-selection" id="godSelectionSection" style="display: none;">
+    <label for="godListSelect">Select a God:</label>
+    <select id="godListSelect">
+      <!-- Dynamically populated -->
+    </select>
+
+    <!-- New "Sort By" dropdown -->
+    <label for="godSortSelect">Sort By:</label>
+    <select id="godSortSelect">
+      <option value="alpha">Alphabetical</option>
+      <option value="usage">Most Played</option>
+    </select>
+  </section>
+
+  <!-- Result Visualization -->
+  <section class="results" id="resultsSection" style="display: none;">
+    <h2 id="godNameHeading"></h2>
+    <div id="buildSummaries"></div>
+
+    <div id="itemFrequencySummary">
+      <h3>Overall Item Usage</h3>
+      <ul id="itemFrequencyList"></ul>
+    </div>
+  </section>
+
+</div><!-- container -->
+
+<script src="{{ url_for('static', filename='main.js') }}"></script>
+</body>
+</html> 

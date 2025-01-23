@@ -10,25 +10,29 @@ from smite2_rh_sdk import Smite2RallyHereSDK
 ENABLE_RH_FETCH_PLAYER_ID_FROM_PLAYER_UUID = False
 ENABLE_RH_FETCH_PLAYER_PRESENCE_BY_UUID = False
 ENABLE_RH_FETCH_MATCHES_BY_PLAYER_UUID = False
-ENABLE_RH_FETCH_PLAYER_STATS = False
+ENABLE_RH_FETCH_PLAYER_STATS = True
 ENABLE_RH_FETCH_MATCHES_BY_INSTANCE = False
 ENABLE_S2_FETCH_MATCHES_BY_PLAYER_UUID = True
 ENABLE_S2_FETCH_PLAYER_STATS = True
-ENABLE_S2_FETCH_MATCHES_BY_INSTANCE = True
+ENABLE_S2_FETCH_MATCHES_BY_INSTANCE = False
 ENABLE_RH_FETCH_PLAYER_BY_PLATFORM_USER_ID = False
 ENABLE_RH_FETCH_PLAYER_WITH_DISPLAYNAME_NO_LINKED = False
 ENABLE_RH_FETCH_PLAYER_WITH_DISPLAYNAME_LINKED = False
 ENABLE_RH_FETCH_PLAYER_SETTING = False
-
-# New flag for fetching all player settings of a specific type
-ENABLE_RH_FETCH_PLAYER_SETTINGS_ALL = True
-
+ENABLE_RH_FETCH_PLAYER_SETTINGS_ALL = False
 ENABLE_GET_ITEMS = False
 ENABLE_GET_SANDBOX_KVS = False
+ENABLE_S2_SUMMARIZE_BUILDS_BY_PLAYER_WITH_DISPLAYNAME = False
+ENABLE_S2_FETCH_FULL_PLAYER_DATA_BY_DISPLAYNAME = True
+
+# This controls how many matches are pulled by S2_fetch_full_player_data_by_displayname,
+# as well as S2_fetch_matches_by_player_uuid, etc.
+MAX_MATCHES_TO_TEST = 2
 
 # You can quickly change the test values here:
 # These IDs are examples—adjust them according to your environment or scenario.
-PLAYER_UUID = "e3438d31-c3ee-5377-b645-5a604b0e2b0e"  # Example valid player UUID
+#PLAYER_UUID = "e3438d31-c3ee-5377-b645-5a604b0e2b0e"  # Example valid player UUID
+PLAYER_UUID = "a80c9e7c-d09d-5687-913a-b5f2083c94df" #PBM
 INSTANCE_ID = "55b5f41a-0526-45fa-b992-b212fd12a849"  # Example instance ID
 SANDBOX_ID = os.getenv("RH_DEV_SANDBOX_ID", "demo_sandbox_id")  # Example sandbox ID or fallback
 EXAMPLE_ITEM_IDS = [
@@ -37,7 +41,7 @@ EXAMPLE_ITEM_IDS = [
 ]
 
 # Example platform / user data
-PLATFORM_TO_TEST = "steam"
+PLATFORM_TO_TEST = "Steam"
 PLATFORM_USER_ID_TO_TEST = "weak3n"
 DISPLAY_NAME_TO_TEST = "Weak3n"
 
@@ -125,7 +129,7 @@ def main():
     # 6) S2_fetch_matches_by_player_uuid (transformed data)
     if ENABLE_S2_FETCH_MATCHES_BY_PLAYER_UUID:
         try:
-            s2_matches = sdk.S2_fetch_matches_by_player_uuid(PLAYER_UUID)
+            s2_matches = sdk.S2_fetch_matches_by_player_uuid(PLAYER_UUID, max_matches=300)
             save_json(s2_matches, "S2_fetch_matches_by_player_uuid")
         except Exception as e:
             print(f"Error calling S2_fetch_matches_by_player_uuid: {e}")
@@ -212,6 +216,30 @@ def main():
             save_json(settings_all, "rh_fetch_player_settings_all")
         except Exception as e:
             print(f"Error calling rh_fetch_player_settings_all: {e}")
+
+    # (NEW) s2_summarize_builds_by_player_with_displayname
+    if ENABLE_S2_SUMMARIZE_BUILDS_BY_PLAYER_WITH_DISPLAYNAME:
+        try:
+            summary_data = sdk.s2_summarize_builds_by_player_with_displayname(
+                platform=PLATFORM_TO_TEST,
+                display_name=DISPLAY_NAME_TO_TEST,
+                max_matches_per_player=300
+            )
+            save_json(summary_data, "s2_summarize_builds_by_player_with_displayname")
+        except Exception as e:
+            print(f"Error calling s2_summarize_builds_by_player_with_displayname: {e}")
+
+    # (NEW) s2_fetch_full_player_data_by_displayname
+    if ENABLE_S2_FETCH_FULL_PLAYER_DATA_BY_DISPLAYNAME:
+        try:
+            full_data = sdk.S2_fetch_full_player_data_by_displayname(
+                platform=PLATFORM_TO_TEST,
+                display_name=DISPLAY_NAME_TO_TEST,
+                max_matches=MAX_MATCHES_TO_TEST
+            )
+            save_json(full_data, "S2_fetch_full_player_data_by_displayname")
+        except Exception as e:
+            print(f"Error calling S2_fetch_full_player_data_by_displayname: {e}")
 
     # Obtain dev token for developer-based endpoints (if running get_items/get_sandbox_kvs)
     try:
