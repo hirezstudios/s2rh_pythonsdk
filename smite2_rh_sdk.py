@@ -572,13 +572,13 @@ class Smite2RallyHereSDK:
         1) Calls rh_fetch_player_with_displayname (including linked portals).
         2) Collects all player UUIDs from that data.
         3) Fetches match history (S2_fetch_matches_by_player_uuid) and stats (S2_fetch_player_stats).
-        4) Returns a simplified JSON blob with:
+        4) (NEW) Fetches rank data (rh_fetch_player_ranks_by_uuid).
+        5) Returns a simplified JSON blob with:
            {
-               "PlayerInfo": {...},       # raw "lookup" JSON
-               "PlayerStats": [          # array of {"player_uuid": ..., "stats": {...}}
-                   {"player_uuid": "...", "stats": {...}}
-               ],
-               "MatchHistory": [...]     # array of match records
+               "PlayerInfo": {...},
+               "PlayerStats": [],
+               "PlayerRanks": [],    # <-- new node
+               "MatchHistory": []
            }
         """
         token = self._get_env_access_token()
@@ -604,25 +604,30 @@ class Smite2RallyHereSDK:
                         if lp_uuid:
                             all_player_uuids.add(lp_uuid)
 
-        # 3) Build the return structure.
         combined_data = {
             "PlayerInfo": player_info,
             "PlayerStats": [],
+            "PlayerRanks": [],   # (NEW) for rank data
             "MatchHistory": []
         }
 
-        # 4) For each UUID found, fetch S2 stats & match history, accumulate in combined_data.
+        # 3) For each UUID found, fetch stats & match history, accumulate in combined_data.
         for uuid_val in all_player_uuids:
             stats_data = self.S2_fetch_player_stats(uuid_val)
             matches_data = self.S2_fetch_matches_by_player_uuid(uuid_val, max_matches=max_matches)
 
-            # store stats keyed to the player's UUID
             combined_data["PlayerStats"].append({
                 "player_uuid": uuid_val,
                 "stats": stats_data
             })
             combined_data["MatchHistory"].extend(matches_data)
 
+            # (NEW) 4) Fetch rank data
+            ranks_data = self.rh_fetch_player_ranks_by_uuid(token, uuid_val)
+            # The response typically includes {"player_ranks": [ ... ]}, so we grab that list
+            combined_data["PlayerRanks"].extend(ranks_data.get("player_ranks", []))
+
+        # 5) Return the consolidated structure
         return combined_data
 
     # -------------------------------------------------------------------------
@@ -1015,126 +1020,168 @@ class Smite2RallyHereSDK:
         response.raise_for_status()
         return response.json()
 
-    # -------------------------------------------------------------------------
-    # Extra Utility
-    # -------------------------------------------------------------------------
-    def save_json_to_file(self, data, filename: str) -> None:
-        """
-        Saves 'data' (Python object) as JSON into a specified file.
-        """
-        with open(filename, 'w') as file:
-            json.dump(data, file, indent=2)
-
-    def s2_summarize_builds_by_player_with_displayname(
+    def rh_fetch_player_ranks_by_uuid(
         self,
-        platform: str,
-        display_name: str,
-        max_matches_per_player: int = 300
+        token: str,
+        player_uuid: str
     ) -> dict:
         """
-        Summarizes popular item builds by god for a given player (looked up by Display Name + Platform),
-        also including that player's linked portals. Essentially:
-          1) Look up the player(s) in rh_fetch_player_with_displayname_linked
-          2) Gather all player_uuid entries (including linked_portals)
-          3) For each UUID, fetch up to max_matches_per_player worth of match data
-          4) Summarize, by god, the frequency of each item build used
-          5) Return a JSON-friendly structure describing the top item builds for each god.
+        Fetch all of a specific player's ranks from the RallyHere Environment API,
+        then:
+          1) Call the Rank Config V3 endpoint for each rank_id to enrich the data
+             with 'rank_name' and 'rank_description'.
+          2) Call the single rank V2 endpoint (/rank/v2/player/{player_uuid}/rank/{rank_id})
+             to retrieve 'custom_data' for each rank.
+
+        Endpoint Workflow:
+          a) GET /rank/v2/player/{player_uuid}/rank               (list of ranks)
+          b) For each rank_id, GET /rank/v3/rank/{rank_id}        (rank's config)
+          c) For each rank_id, GET /rank/v2/player/{player_uuid}/rank/{rank_id}  (custom_data)
+
+        Required Permissions:
+          - rank:read:self for the player themselves, or rank:read:any otherwise
+          - rank:read:config for fetching rank metadata
+
+        :param token: A valid environment token (retrieved via _get_env_access_token).
+        :param player_uuid: The UUID of the player.
+        :return: The JSON object with "player_ranks", enriched with:
+                 - rank_name
+                 - rank_description
+                 - rank["custom_data"] from the single rank endpoint
+                 Example structure:
+                 {
+                     "player_ranks": [
+                         {
+                             "player_uuid": "...",
+                             "rank_id": "...",
+                             "rank": {
+                                 "mu": ...,
+                                 "sigma": ...,
+                                 "custom_data": {...}
+                             },
+                             "rank_name": "...",
+                             "rank_description": "..."
+                         },
+                         ...
+                     ]
+                 }
         """
+        # Step 1a: Fetch the player's rank list from /rank/v2/player/{player_uuid}/rank
+        list_url = f"{self.env_base_url}/rank/v2/player/{player_uuid}/rank"
+        headers = {
+            "Accept": "application/json",
+            "Authorization": f"Bearer {token}"
+        }
+        list_resp = requests.get(list_url, headers=headers)
+        list_resp.raise_for_status()
 
-        # 1) Look up the player data from rh_fetch_player_with_displayname_linked
-        token = self._get_env_access_token()
-        player_data = self.rh_fetch_player_with_displayname(
-            token=token,
-            display_names=[display_name],
-            platform=platform,
-            include_linked_portals=True
-        )
+        data = list_resp.json()  # Expected shape: {"player_ranks": [...]}
+        player_ranks = data.get("player_ranks", [])
 
-        # We'll gather each unique player_uuid
-        all_player_uuids = set()
-
-        # The structure from rh_fetch_player_with_displayname_linked is typically:
-        # {
-        #   "display_names": [
-        #       {
-        #           "SomeDisplayName": [
-        #               { "player_id": X, "player_uuid": "...", "linked_portals": [...], ... },
-        #               ...
-        #           ]
-        #       }
-        #   ]
-        # }
-        for display_name_obj in player_data.get("display_names", []):
-            # display_name_obj might look like { "Weak3n": [ {...}, {...} ] }
-            for _, player_array in display_name_obj.items():
-                for p_obj in player_array:
-                    main_uuid = p_obj.get("player_uuid")
-                    if main_uuid:
-                        all_player_uuids.add(main_uuid)
-                    # Also check linked portals
-                    linked_portals = p_obj.get("linked_portals", [])
-                    for lp in linked_portals:
-                        lp_uuid = lp.get("player_uuid")
-                        if lp_uuid:
-                            all_player_uuids.add(lp_uuid)
-
-        # If we found no UUIDs, return an empty summary
-        if not all_player_uuids:
-            return {"error": "No associated player_uuid found for that display name + platform."}
-
-        # 2) For each player_uuid, fetch up to max_matches worth of match data
-        all_matches = []
-        for uuid_value in all_player_uuids:
-            # s2_fetch_matches_by_player_uuid returns a list of player-based records
-            # (each record includes "items", "god_name", etc.).
-            player_matches = self.S2_fetch_matches_by_player_uuid(
-                uuid_value,
-                max_matches=max_matches_per_player
-            )
-            all_matches.extend(player_matches)
-
-        # 3) Summarize the item builds by god
-        builds_by_god = {}
-        for m in all_matches:
-            # Each record includes a 'god_name', 'items', etc.
-            god_name = m.get("god_name", "UnknownGod")
-            items = m.get("items", {})
-
-            # Convert items to a sorted tuple of item names/IDs (or display names).
-            # Sorting ensures that build order doesn't matter, but set logic remains consistent.
-            # Alternatively, you could keep them in the actual equip order if you prefer.
-            # Here, we'll take the item map's "Item_Id" or "DisplayName".
-            # For demonstration, let's just grab a sorted list of the display names if available:
-            build_list = []
-            for slot_key in sorted(items.keys()):
-                item_info = items[slot_key]
-                if isinstance(item_info, dict):
-                    # Typically something like { "Item_Id": "...", "DisplayName": "..." }
-                    build_list.append(item_info.get("DisplayName", item_info.get("Item_Id", "UnknownItem")))
+        # Step 1b & 1c: For each rank_id in the rank list, fetch config (rank_name, rank_description)
+        # and also fetch single-rank data (custom_data).
+        for rank_obj in player_ranks:
+            rank_id = rank_obj.get("rank_id")
+            if rank_id:
+                # -- b) Rank Config V3 for the name / description
+                config_url = f"{self.env_base_url}/rank/v3/rank/{rank_id}"
+                config_resp = requests.get(config_url, headers=headers)
+                config_resp.raise_for_status()
+                config_data = config_resp.json()
+                configs_list = config_data.get("rank_configs", [])
+                if configs_list:
+                    rank_info = configs_list[0]
+                    rank_obj["rank_name"] = rank_info.get("name")
+                    rank_obj["rank_description"] = rank_info.get("description")
                 else:
-                    # fallback if it's just a string
-                    build_list.append(str(item_info))
-            build_tuple = tuple(build_list)
+                    rank_obj["rank_name"] = "<no_config>"
+                    rank_obj["rank_description"] = "<no_config>"
 
-            if god_name not in builds_by_god:
-                builds_by_god[god_name] = {}
+                # -- c) Single Rank V2 for custom_data
+                single_rank_url = f"{self.env_base_url}/rank/v2/player/{player_uuid}/rank/{rank_id}"
+                single_resp = requests.get(single_rank_url, headers=headers)
+                single_resp.raise_for_status()
+                single_data = single_resp.json()  # shape: {"player_ranks": [ { ... } ]}
 
-            # If we haven't seen this build yet, initialize
-            builds_by_god[god_name].setdefault(build_tuple, 0)
-            builds_by_god[god_name][build_tuple] += 1
+                sr_list = single_data.get("player_ranks", [])
+                if sr_list:
+                    # Typically only one rank object in this array
+                    detailed_rank_obj = sr_list[0]
+                    # Merge in the "custom_data" if it exists
+                    if "rank" in detailed_rank_obj and "custom_data" in detailed_rank_obj["rank"]:
+                        # Ensure our original rank_obj["rank"] is a dict
+                        rank_obj.setdefault("rank", {})
+                        rank_obj["rank"]["custom_data"] = detailed_rank_obj["rank"].get("custom_data", {})
 
-        # 4) Convert builds_by_god to a final structure listing each god's popular builds
-        # e.g., { "god_name": [{ "build": [...], "count": N }, ...] }
-        result = {}
-        for god, builds_dict in builds_by_god.items():
-            builds_list = []
-            for build_tup, usage_count in builds_dict.items():
-                builds_list.append({
-                    "build": list(build_tup),
-                    "count": usage_count
-                })
-            # Sort them by usage descending
-            builds_list.sort(key=lambda x: x["count"], reverse=True)
-            result[god] = builds_list
+        # Step 2: Return the enriched rank data
+        return data
 
-        return result
+    def get_all_org_products(self, org_identifier: str) -> List[dict]:
+        """
+        Retrieves all products for a given organization from the RallyHere Dev API.
+
+        Endpoint:
+            GET /api/v1/org/:org_identifier/product
+
+        Required Permission:
+            - org:config:view
+
+        :param org_identifier: The ID or short name of the organization.
+        :return: A list of product dictionaries, each containing fields such as
+                 product_id, org_id, name, short_name, unique_name, etc.
+        :raises ValueError: If org_identifier is invalid or missing.
+        :raises RequestException: If an error occurs while making the request.
+        """
+        if not org_identifier:
+            raise ValueError("Missing org_identifier. Provide the organization ID or short name.")
+
+        access_token = self._get_dev_access_token()
+        try:
+            response = requests.get(
+                f"{self.dev_base_url}/api/v1/org/{org_identifier}/product",
+                headers={"Authorization": f"Bearer {access_token}", "Accept": "application/json"},
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            print(f"Error fetching org products: {e}")
+            raise
+
+    def get_all_sandboxes_for_product(self) -> List[dict]:
+        """
+        Retrieves all sandboxes for a given product from the RallyHere Dev API.
+
+        Endpoint:
+            GET /api/v1/org/:org_identifier/product/:product_identifier/sandboxes
+
+        Required Permissions:
+            - product:config:view or product:config:edit
+
+        The ORG_IDENTIFIER and PRODUCT_ID are expected to be set in environment variables:
+            RH_DEV_ORG_ID and RH_DEV_PRODUCT_ID
+
+        :return: A list of sandbox dictionaries, each containing fields like sandbox_id,
+                 product_id, short_name, name, archive, readonly, etc.
+        :raises ValueError: If environment variables are missing or invalid.
+        :raises RequestException: If an error occurs while making the request.
+        """
+        org_identifier = os.getenv("RH_DEV_ORG_ID")
+        product_identifier = os.getenv("RH_DEV_PRODUCT_ID")
+
+        if not org_identifier:
+            raise ValueError("Missing environment variable RH_DEV_ORG_ID.")
+        if not product_identifier:
+            raise ValueError("Missing environment variable RH_DEV_PRODUCT_ID.")
+
+        access_token = self._get_dev_access_token()
+        try:
+            url = f"{self.dev_base_url}/api/v1/org/{org_identifier}/product/{product_identifier}/sandboxes"
+            response = requests.get(
+                url,
+                headers={"Authorization": f"Bearer {access_token}", "Accept": "application/json"},
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            print(f"Error fetching product sandboxes: {e}")
+            raise

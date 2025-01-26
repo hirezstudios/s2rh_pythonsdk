@@ -10,10 +10,10 @@ from smite2_rh_sdk import Smite2RallyHereSDK
 ENABLE_RH_FETCH_PLAYER_ID_FROM_PLAYER_UUID = False
 ENABLE_RH_FETCH_PLAYER_PRESENCE_BY_UUID = False
 ENABLE_RH_FETCH_MATCHES_BY_PLAYER_UUID = False
-ENABLE_RH_FETCH_PLAYER_STATS = True
+ENABLE_RH_FETCH_PLAYER_STATS = False
 ENABLE_RH_FETCH_MATCHES_BY_INSTANCE = False
-ENABLE_S2_FETCH_MATCHES_BY_PLAYER_UUID = True
-ENABLE_S2_FETCH_PLAYER_STATS = True
+ENABLE_S2_FETCH_MATCHES_BY_PLAYER_UUID = False
+ENABLE_S2_FETCH_PLAYER_STATS = False
 ENABLE_S2_FETCH_MATCHES_BY_INSTANCE = False
 ENABLE_RH_FETCH_PLAYER_BY_PLATFORM_USER_ID = False
 ENABLE_RH_FETCH_PLAYER_WITH_DISPLAYNAME_NO_LINKED = False
@@ -23,7 +23,10 @@ ENABLE_RH_FETCH_PLAYER_SETTINGS_ALL = False
 ENABLE_GET_ITEMS = False
 ENABLE_GET_SANDBOX_KVS = False
 ENABLE_S2_SUMMARIZE_BUILDS_BY_PLAYER_WITH_DISPLAYNAME = False
-ENABLE_S2_FETCH_FULL_PLAYER_DATA_BY_DISPLAYNAME = True
+ENABLE_S2_FETCH_FULL_PLAYER_DATA_BY_DISPLAYNAME = False
+ENABLE_RH_FETCH_PLAYER_RANKS_BY_UUID = False
+ENABLE_GET_ALL_ORG_PRODUCTS = False #PERMISSIONS ISSUE
+ENABLE_GET_SANDBOXES_FOR_PRODUCT = True
 
 # This controls how many matches are pulled by S2_fetch_full_player_data_by_displayname,
 # as well as S2_fetch_matches_by_player_uuid, etc.
@@ -39,6 +42,11 @@ EXAMPLE_ITEM_IDS = [
     "00000000-0000-0000-0000-00000000008c",
     "00000000-0000-0000-0000-0000000000af"
 ]
+
+# Example org identifier
+# Hi-Rez Studios
+ORG_IDENTIFIER_TO_TEST = "1806a824-d204-41f2-b411-ffe5beb1b624"
+
 
 # Example platform / user data
 PLATFORM_TO_TEST = "Steam"
@@ -241,6 +249,14 @@ def main():
         except Exception as e:
             print(f"Error calling S2_fetch_full_player_data_by_displayname: {e}")
 
+    # (NEW) rh_fetch_player_ranks_by_uuid
+    if ENABLE_RH_FETCH_PLAYER_RANKS_BY_UUID:
+        try:
+            ranks_data = sdk.rh_fetch_player_ranks_by_uuid(env_token, PLAYER_UUID)
+            save_json(ranks_data, "rh_fetch_player_ranks_by_uuid")
+        except Exception as e:
+            print(f"Error calling rh_fetch_player_ranks_by_uuid: {e}")
+
     # Obtain dev token for developer-based endpoints (if running get_items/get_sandbox_kvs)
     try:
         dev_token = sdk._get_dev_access_token()  # Developer API token
@@ -267,6 +283,22 @@ def main():
             save_json(kvs_response, "get_sandbox_kvs")
         except Exception as e:
             print(f"Error calling get_sandbox_kvs: {e}")
+
+    # 16) get_all_org_products
+    if dev_token and ENABLE_GET_ALL_ORG_PRODUCTS:
+        try:
+            org_products = sdk.get_all_org_products(ORG_IDENTIFIER_TO_TEST)
+            save_json(org_products, "get_all_org_products")
+        except Exception as e:
+            print(f"Error calling get_all_org_products: {e}")
+
+    # (NEW) get_all_sandboxes_for_product
+    if dev_token and ENABLE_GET_SANDBOXES_FOR_PRODUCT:
+        try:
+            sandboxes = sdk.get_all_sandboxes_for_product()
+            save_json(sandboxes, "get_all_sandboxes_for_product")
+        except Exception as e:
+            print(f"Error calling get_all_sandboxes_for_product: {e}")
 
     print("Done running all example SDK calls.")
 
