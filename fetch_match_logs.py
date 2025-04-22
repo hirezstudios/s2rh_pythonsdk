@@ -284,115 +284,52 @@ def download_match_logs(files_api: Smite2RallyHereFilesAPI, match_id: str,
     Returns:
         List of paths to downloaded files.
     """
-    # Create output directory if it doesn't exist (but don't create match subdirectories)
+    # Create output directory if it doesn't exist
     os.makedirs(output_dir, exist_ok=True)
     
     all_downloaded = []
+    token = files_api.sdk._get_env_access_token()
     
     try:
         # Try to download specified file types
         for file_type in file_types:
             try:
-                # Create unique filenames for each file by including match_id
-                # This is needed since we're storing all files in a single directory
-                original_files = files_api.filter_match_files_by_type(match_id, file_type)
+                # Use the enhanced SDK method with custom filename pattern
+                downloaded_files = files_api.download_match_file_by_type(
+                    match_id=match_id,
+                    file_type=file_type,
+                    output_dir=output_dir,
+                    token=token,
+                    filename_pattern="{match_id}_{filename}"  # Custom naming pattern
+                )
                 
-                # Download each file with a modified filename
-                for file_info in original_files:
-                    original_name = file_info.get("name", "")
-                    if not original_name:
-                        continue
-                        
-                    # Create a unique filename by prepending match_id
-                    base_name, ext = os.path.splitext(original_name)
-                    unique_name = f"{match_id}_{original_name}"
-                    output_path = os.path.join(output_dir, unique_name)
-                    
-                    try:
-                        # Download using original name but save to unique path
-                        url = None
-                        api_type = file_info.get("api_type", "file")
-                        token = files_api.sdk._get_env_access_token()
-                        
-                        # Use direct URL download
-                        url = f"{files_api.base_url}/{api_type}/match/{match_id}/{original_name}"
-                        
-                        headers = {
-                            "Authorization": f"Bearer {token}"
-                        }
-                        
-                        response = requests.get(url, headers=headers, stream=True)
-                        response.raise_for_status()
-                        
-                        # Save the file
-                        with open(output_path, 'wb') as f:
-                            for chunk in response.iter_content(chunk_size=8192):
-                                f.write(chunk)
-                        
-                        all_downloaded.append(output_path)
-                        print(f"Downloaded: {unique_name}")
-                    except Exception as e:
-                        print(f"Error downloading {original_name}: {e}")
-                
-                if all_downloaded:
-                    print(f"Downloaded {len(all_downloaded)} {file_type} files for match {match_id}")
+                if downloaded_files:
+                    all_downloaded.extend(downloaded_files)
+                    print(f"Downloaded {len(downloaded_files)} {file_type} files for match {match_id}")
+                else:
+                    print(f"No {file_type} files found for match {match_id}")
             except FileNotFoundException:
                 print(f"No {file_type} files found for match {match_id}")
             except Exception as e:
-                print(f"Error downloading {file_type} files for match {match_id}: {e}")
+                print(f"Error processing {file_type} files for match {match_id}: {e}")
         
         # If no files of the specified types were found and fallback_all is True, try downloading all available files
         if not all_downloaded and fallback_all:
             print(f"No files of specified types found. Attempting to download all available files...")
             try:
-                # Get all files
-                all_files = []
-                api_types = ["file", "developer-file"]
+                # Use the enhanced SDK method for downloading all files
+                downloaded_files = files_api.download_all_match_files(
+                    match_id=match_id,
+                    output_dir=output_dir,
+                    token=token,
+                    filename_pattern="{match_id}_{filename}"  # Custom naming pattern
+                )
                 
-                for api_type in api_types:
-                    try:
-                        files = files_api.list_match_files(match_id, token=None, file_type=api_type)
-                        all_files.extend(files)
-                    except Exception as e:
-                        print(f"Warning: Error getting files from {api_type}: {str(e)}")
-                
-                # Download each file with a unique name
-                for file_info in all_files:
-                    original_name = file_info.get("name", "")
-                    if not original_name:
-                        continue
-                        
-                    # Create a unique filename by prepending match_id
-                    unique_name = f"{match_id}_{original_name}"
-                    output_path = os.path.join(output_dir, unique_name)
-                    
-                    try:
-                        # Download using original name but save to unique path
-                        api_type = file_info.get("api_type", "file")
-                        token = files_api.sdk._get_env_access_token()
-                        
-                        # Use direct URL download
-                        url = f"{files_api.base_url}/{api_type}/match/{match_id}/{original_name}"
-                        
-                        headers = {
-                            "Authorization": f"Bearer {token}"
-                        }
-                        
-                        response = requests.get(url, headers=headers, stream=True)
-                        response.raise_for_status()
-                        
-                        # Save the file
-                        with open(output_path, 'wb') as f:
-                            for chunk in response.iter_content(chunk_size=8192):
-                                f.write(chunk)
-                        
-                        all_downloaded.append(output_path)
-                        print(f"Downloaded: {unique_name}")
-                    except Exception as e:
-                        print(f"Error downloading {original_name}: {e}")
-                
-                if all_downloaded:
-                    print(f"Downloaded {len(all_downloaded)} files of various types for match {match_id}")
+                if downloaded_files:
+                    all_downloaded.extend(downloaded_files)
+                    print(f"Downloaded {len(downloaded_files)} files of various types for match {match_id}")
+                else:
+                    print(f"No files found for match {match_id}")
             except Exception as e:
                 print(f"Error downloading all files for match {match_id}: {e}")
                 

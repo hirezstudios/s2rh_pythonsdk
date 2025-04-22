@@ -21,6 +21,20 @@ class FileTypeConstants:
     SOURCE_TYPE_SESSION = "SESSION"
     SOURCE_TYPE_INSTANCE = "INSTANCE"
     
+    # API endpoints
+    ENDPOINT_FILE = "file"
+    ENDPOINT_DEVELOPER_FILE = "developer-file"
+    
+    # Map file types to their common endpoints
+    FILE_TYPE_ENDPOINTS = {
+        CHAT_LOG: [ENDPOINT_DEVELOPER_FILE],  # Chat logs typically only in developer-file
+        COMBAT_LOG: [ENDPOINT_FILE, ENDPOINT_DEVELOPER_FILE],  # Combat logs can be in either
+        CONSOLE_LOG: [ENDPOINT_FILE, ENDPOINT_DEVELOPER_FILE],
+        GAME_SESSION_SUMMARY: [ENDPOINT_FILE, ENDPOINT_DEVELOPER_FILE],
+        MATCH_SUMMARY: [ENDPOINT_FILE, ENDPOINT_DEVELOPER_FILE],
+        SERVER_METADATA: [ENDPOINT_FILE, ENDPOINT_DEVELOPER_FILE]
+    }
+    
     # Mapping patterns for file recognition
     FILE_TYPE_PATTERNS = {
         COMBAT_LOG: re.compile(r"CombatLog_.*\.log$", re.IGNORECASE),
@@ -49,30 +63,19 @@ class FileTypeConstants:
             if pattern.match(filename):
                 return file_type
         return None
-        
+    
     @classmethod
-    def extract_session_id(cls, filename: str) -> Optional[str]:
+    def get_endpoints_for_file_type(cls, file_type: str) -> List[str]:
         """
-        Extract the session ID from a filename.
+        Get the appropriate API endpoints for a given file type.
         
         Args:
-            filename: The filename to extract from.
+            file_type: The file type constant.
             
         Returns:
-            The session ID if found, None otherwise.
+            List of endpoint names to check for this file type.
         """
-        if not filename:
-            return None
-            
-        # Look for patterns like CombatLog_SESSION_ID.log or ChatLog_SESSION_ID.log
-        for prefix in ["CombatLog_", "ChatLog_", "ConsoleLog_"]:
-            if filename.startswith(prefix):
-                # Extract part between prefix and file extension
-                session_part = filename[len(prefix):].split(".")[0]
-                if len(session_part) >= 36:  # UUID is typically 36 chars
-                    return session_part
-        
-        return None
+        return cls.FILE_TYPE_ENDPOINTS.get(file_type, [cls.ENDPOINT_FILE, cls.ENDPOINT_DEVELOPER_FILE])
 
 
 class FileNotFoundException(Exception):
@@ -306,7 +309,8 @@ class Smite2RallyHereFilesAPI:
                                 match_id: str, 
                                 output_dir: str, 
                                 token: Optional[str] = None,
-                                file_types: Optional[List[str]] = None) -> List[str]:
+                                file_types: Optional[List[str]] = None,
+                                filename_pattern: Optional[str] = None) -> List[str]:
         """
         Download all files for a match.
         
@@ -315,6 +319,8 @@ class Smite2RallyHereFilesAPI:
             output_dir: The directory to save the files to.
             token: An optional token. If not provided, one will be obtained automatically.
             file_types: Optional list of file types to download. If not provided, all files will be downloaded.
+            filename_pattern: Optional pattern for saving files. Use {match_id} and {filename} as placeholders.
+                Default is just the original filename.
             
         Returns:
             A list of paths to the downloaded files.
@@ -331,11 +337,13 @@ class Smite2RallyHereFilesAPI:
             
         # Get files from both 'file' and 'developer-file' types
         all_files = []
-        api_types = ["file", "developer-file"]
+        api_types = [FileTypeConstants.ENDPOINT_FILE, FileTypeConstants.ENDPOINT_DEVELOPER_FILE]
         
         for api_type in api_types:
             try:
                 files = self.list_match_files(match_id, token, api_type)
+                for file_info in files:
+                    file_info["api_type"] = api_type  # Add the API type
                 all_files.extend(files)
             except Exception as e:
                 print(f"Warning: Error getting files from {api_type}: {str(e)}")
@@ -359,9 +367,15 @@ class Smite2RallyHereFilesAPI:
             if not filename:
                 continue
                 
+            # Apply filename pattern if provided
+            if filename_pattern:
+                output_filename = filename_pattern.format(match_id=match_id, filename=filename)
+            else:
+                output_filename = filename
+            
             # Get API type for URL construction
             api_type = file_info.get("api_type", "file")
-            output_path = os.path.join(output_dir, filename)
+            output_path = os.path.join(output_dir, output_filename)
             
             try:
                 # Use direct URL download approach for all files
@@ -380,7 +394,7 @@ class Smite2RallyHereFilesAPI:
                         f.write(chunk)
                 
                 downloaded_files.append(output_path)
-                print(f"Downloaded: {filename}")
+                print(f"Downloaded: {os.path.basename(output_path)}")
             except Exception as e:
                 # Log the error but continue downloading other files
                 print(f"Warning: Error downloading {filename}: {str(e)}")
@@ -612,18 +626,21 @@ class Smite2RallyHereFilesAPI:
     def download_match_file_by_type(self, 
                                    match_id: str, 
                                    file_type: str,
-                                   session_id: Optional[str] = None,
                                    output_dir: Optional[str] = None, 
-                                   token: Optional[str] = None) -> List[str]:
+                                   session_id: Optional[str] = None,
+                                   token: Optional[str] = None,
+                                   filename_pattern: Optional[str] = None) -> List[str]:
         """
         Download files of a specific type for a match.
         
         Args:
             match_id: The match ID.
             file_type: The file type to download.
-            session_id: Optional session ID to filter by.
             output_dir: The directory to save the files to. If not provided, the files will be saved to the current directory.
+            session_id: Optional session ID to filter by.
             token: An optional token. If not provided, one will be obtained automatically.
+            filename_pattern: Optional pattern for saving files. Use {match_id} and {filename} as placeholders.
+                Default is just the original filename.
             
         Returns:
             A list of paths to the downloaded files.
@@ -636,51 +653,73 @@ class Smite2RallyHereFilesAPI:
         if token is None:
             token = self.sdk._get_env_access_token()
             
-        # Get files of both API types
+        # Determine which endpoints to check for this file type
+        endpoints = FileTypeConstants.get_endpoints_for_file_type(file_type)
+        
+        # Find all matching files across all appropriate endpoints
         all_files = []
-        api_types = ["file", "developer-file"]
         
-        for api_type in api_types:
+        for endpoint in endpoints:
             try:
-                files = self.list_match_files(match_id, token, api_type)
-                all_files.extend(files)
+                files = self.list_match_files(match_id, token, endpoint)
+                
+                # Add endpoint info to each file record for later use
+                for file_info in files:
+                    file_info["api_type"] = endpoint
+                    
+                # Filter to get only files of the requested type
+                type_files = []
+                for file_info in files:
+                    filename = file_info.get("name", "")
+                    if FileTypeConstants.identify_file_type(filename) == file_type:
+                        type_files.append(file_info)
+                        
+                # Filter by session_id if provided
+                if session_id and type_files:
+                    filtered_files = []
+                    for file_info in type_files:
+                        name = file_info.get("name", "")
+                        if session_id in name:
+                            filtered_files.append(file_info)
+                    if filtered_files:
+                        type_files = filtered_files
+                        
+                all_files.extend(type_files)
             except Exception as e:
-                print(f"Warning: Error fetching files from {api_type}: {e}")
-        
-        # Filter to get only files of the requested type
-        type_files = []
-        for file_info in all_files:
-            filename = file_info.get("name", "")
-            if FileTypeConstants.identify_file_type(filename) == file_type:
-                type_files.append(file_info)
-        
-        # Filter by session_id if provided
-        if session_id and type_files:
-            filtered_files = []
-            for file_info in type_files:
-                name = file_info.get("name", "")
-                if session_id in name:
-                    filtered_files.append(file_info)
-            if filtered_files:
-                type_files = filtered_files
-            
-        if not type_files:
+                print(f"Warning: Error fetching files from {endpoint} endpoint: {e}")
+                
+        if not all_files:
             raise FileNotFoundException(f"No files of type {file_type} found for match {match_id}")
+            
+        # Ensure the output directory exists
+        if output_dir:
+            os.makedirs(output_dir, exist_ok=True)
             
         # Download each file
         downloaded_files = []
-        for file_info in type_files:
+        for file_info in all_files:
             filename = file_info.get("name", "")
             api_type = file_info.get("api_type", "file")
             
-            if output_dir:
-                output_path = os.path.join(output_dir, filename)
-            else:
-                output_path = filename
+            if not filename:
+                continue
                 
+            # Apply filename pattern if provided
+            if filename_pattern:
+                output_filename = filename_pattern.format(match_id=match_id, filename=filename)
+            else:
+                output_filename = filename
+            
+            # Determine output path
+            if output_dir:
+                output_path = os.path.join(output_dir, output_filename)
+            else:
+                output_path = output_filename
+            
             try:
                 # Use direct URL download
                 url = f"{self.base_url}/{api_type}/match/{match_id}/{filename}"
+                
                 headers = {
                     "Authorization": f"Bearer {token}"
                 }
@@ -695,7 +734,7 @@ class Smite2RallyHereFilesAPI:
                         f.write(chunk)
                 
                 downloaded_files.append(output_path)
-                print(f"Downloaded: {filename}")
+                print(f"Downloaded: {os.path.basename(output_path)}")
             except Exception as e:
                 print(f"Warning: Error downloading {filename}: {e}")
                 
