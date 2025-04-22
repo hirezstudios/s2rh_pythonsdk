@@ -21,6 +21,7 @@ Options:
                        Options: CHAT_LOG, COMBAT_LOG, CONSOLE_LOG, etc.
   --preview            Preview the contents of downloaded files
   --fallback-all       Download all available files if no files of the specified types are found
+  --concurrent INT     Maximum number of concurrent downloads (default: 3)
 
 Note:
   This script saves all files in a single directory (by default 'chat_logs'), 
@@ -33,10 +34,9 @@ import argparse
 import datetime
 import time
 from typing import List, Dict, Any, Optional, Set
-import requests
 from dotenv import load_dotenv, find_dotenv
 
-# Import SDK - use local imports
+# Import SDK
 from smite2_rh_sdk import Smite2RallyHereSDK
 from files_api import Smite2RallyHereFilesAPI, FileTypeConstants, MatchNotFoundException, FileNotFoundException
 
@@ -78,160 +78,10 @@ def parse_args():
                         help="Preview downloaded files")
     parser.add_argument("--fallback-all", action="store_true",
                         help="Download all available files if no files of the specified types are found")
+    parser.add_argument("--concurrent", type=int, default=3,
+                        help="Maximum number of concurrent downloads (default: 3)")
     
     return parser.parse_args()
-
-def get_matches_by_time_range(sdk: Smite2RallyHereSDK, start_date: str, end_date: str, 
-                             limit: int = 10, batch_size: int = 100) -> List[Dict]:
-    """
-    Get matches within a time range using the SDK.
-    
-    Args:
-        sdk: The SDK instance.
-        start_date: Start date in YYYY-MM-DD format.
-        end_date: End date in YYYY-MM-DD format.
-        limit: Maximum number of matches to return (0 for no limit).
-        batch_size: Number of matches to request per API call.
-        
-    Returns:
-        List of match data dictionaries.
-    """
-    # Format dates as ISO 8601
-    start_time = f"{start_date}T00:00:00Z"
-    end_time = f"{end_date}T23:59:59Z"
-    
-    token = sdk._get_env_access_token()
-    url = f"{sdk.env_base_url}/match/v1/match"
-    
-    params = {
-        "start_time": start_time,
-        "end_time": end_time,
-        "page_size": min(batch_size, 100),  # Max 100 per page
-        "status": "closed"
-    }
-    
-    headers = {
-        "Accept": "application/json",
-        "Authorization": f"Bearer {token}"
-    }
-    
-    all_matches = []
-    matches_processed = 0
-    cursor = None
-    no_limit = (limit == 0)
-    
-    try:
-        # This is similar to the SDK's rh_fetch_matches_by_time_range but with our own parameters
-        while no_limit or matches_processed < limit:
-            if cursor:
-                params["cursor"] = cursor
-                
-            response = requests.get(url, headers=headers, params=params)
-            response.raise_for_status()
-            data = response.json()
-            
-            matches = data.get("matches", [])
-            if not matches:
-                break
-                
-            all_matches.extend(matches)
-            matches_processed += len(matches)
-            
-            cursor = data.get("cursor")
-            if not cursor:
-                break
-                
-            # Print progress for large fetches
-            if matches_processed % 100 == 0:
-                print(f"Fetched {matches_processed} matches so far...")
-                
-            # Add a small delay to avoid rate limiting
-            time.sleep(0.1)
-    except Exception as e:
-        print(f"Error fetching matches: {e}")
-        # Add a longer delay after an error
-        time.sleep(1)
-    
-    if limit > 0:
-        return all_matches[:limit]
-    return all_matches
-
-def filter_matches_by_criteria(matches: List[Dict], region_id: Optional[str] = None, 
-                              game_mode: Optional[str] = None, min_duration: Optional[int] = None, 
-                              max_duration: Optional[int] = None) -> List[Dict]:
-    """
-    Filter matches by criteria including duration, region, and game mode.
-    
-    Args:
-        matches: List of match data dictionaries.
-        region_id: Region ID to filter by.
-        game_mode: Game mode to filter by.
-        min_duration: Minimum match duration in seconds.
-        max_duration: Maximum match duration in seconds.
-        
-    Returns:
-        List of filtered match data dictionaries.
-    """
-    filtered = []
-    
-    for match in matches:
-        # Check duration if specified
-        if min_duration is not None and (
-            "duration_seconds" not in match or 
-            match.get("duration_seconds", 0) < min_duration
-        ):
-            continue
-            
-        if max_duration is not None and (
-            "duration_seconds" in match and 
-            match.get("duration_seconds", 0) > max_duration
-        ):
-            continue
-            
-        # Extract instances data
-        instances = match.get("instances", [])
-        if not instances:
-            continue
-            
-        # Use the first instance for filtering
-        instance = instances[0]
-        
-        # Check if the match meets all filter criteria
-        if region_id and instance.get("region_id") != region_id:
-            continue
-            
-        if game_mode:
-            instance_game_mode = instance.get("game_mode", "")
-            if game_mode.lower() not in instance_game_mode.lower():
-                continue
-                
-        # If we reach here, the match has passed all filters
-        filtered.append(match)
-    
-    return filtered
-
-def get_match_details(sdk: Smite2RallyHereSDK, match_id: str) -> Dict:
-    """
-    Get detailed information about a match.
-    
-    Args:
-        sdk: The SDK instance.
-        match_id: The match ID.
-        
-    Returns:
-        Match details dictionary.
-    """
-    token = sdk._get_env_access_token()
-    url = f"{sdk.env_base_url}/match/v1/match/{match_id}"
-    headers = {
-        "Accept": "application/json",
-        "Authorization": f"Bearer {token}"
-    }
-    
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        return response.json()
-    return None
 
 def preview_file(file_path: str, max_lines: int = 10) -> None:
     """
@@ -267,9 +117,28 @@ def preview_file(file_path: str, max_lines: int = 10) -> None:
     except Exception as e:
         print(f"Error previewing file {file_path}: {e}")
 
+def report_download_progress(filename: str, downloaded: int, total: int) -> None:
+    """
+    Report download progress for a file.
+    
+    Args:
+        filename: Name of the file being downloaded.
+        downloaded: Number of bytes downloaded.
+        total: Total size of the file in bytes.
+    """
+    if total > 0:
+        percent = (downloaded / total) * 100
+        print(f"\rDownloading {filename}: {downloaded}/{total} bytes ({percent:.1f}%)", end="")
+    else:
+        print(f"\rDownloading {filename}: {downloaded} bytes", end="")
+    
+    # Add newline when download is complete
+    if downloaded == total:
+        print()
+
 def download_match_logs(files_api: Smite2RallyHereFilesAPI, match_id: str, 
                        output_dir: str, file_types: List[str], preview: bool = False,
-                       fallback_all: bool = False) -> List[str]:
+                       fallback_all: bool = False, max_concurrent: int = 3) -> List[str]:
     """
     Download logs for a specific match.
     
@@ -280,6 +149,7 @@ def download_match_logs(files_api: Smite2RallyHereFilesAPI, match_id: str,
         file_types: List of file types to download.
         preview: Whether to preview downloaded files.
         fallback_all: Whether to download all available files if no files of the specified types are found.
+        max_concurrent: Maximum number of concurrent downloads.
         
     Returns:
         List of paths to downloaded files.
@@ -291,47 +161,67 @@ def download_match_logs(files_api: Smite2RallyHereFilesAPI, match_id: str,
     token = files_api.sdk._get_env_access_token()
     
     try:
-        # Try to download specified file types
+        # List all files for the match from all endpoints
+        all_files = files_api.list_all_match_files(match_id, token)
+        
+        # Group files by their types
+        files_by_type = {}
+        for file_info in all_files:
+            filename = file_info.get("name", "")
+            if not filename:
+                continue
+                
+            file_type = FileTypeConstants.identify_file_type(filename)
+            if file_type:
+                if file_type not in files_by_type:
+                    files_by_type[file_type] = []
+                files_by_type[file_type].append(file_info)
+        
+        # Download files of specified types
         for file_type in file_types:
-            try:
-                # Use the enhanced SDK method with custom filename pattern
-                downloaded_files = files_api.download_match_file_by_type(
+            if file_type in files_by_type and files_by_type[file_type]:
+                type_files = files_by_type[file_type]
+                print(f"Found {len(type_files)} {file_type} files for match {match_id}")
+                
+                # Download files using the enhanced batch download method
+                downloaded = files_api.download_match_files(
                     match_id=match_id,
-                    file_type=file_type,
+                    files=type_files,
                     output_dir=output_dir,
                     token=token,
-                    filename_pattern="{match_id}_{filename}"  # Custom naming pattern
+                    filename_pattern="{match_id}_{filename}",
+                    progress_callback=report_download_progress,
+                    max_concurrent_downloads=max_concurrent
                 )
                 
-                if downloaded_files:
-                    all_downloaded.extend(downloaded_files)
-                    print(f"Downloaded {len(downloaded_files)} {file_type} files for match {match_id}")
+                if downloaded:
+                    all_downloaded.extend(downloaded)
+                    print(f"Downloaded {len(downloaded)} {file_type} files for match {match_id}")
                 else:
-                    print(f"No {file_type} files found for match {match_id}")
-            except FileNotFoundException:
+                    print(f"No {file_type} files could be downloaded for match {match_id}")
+            else:
                 print(f"No {file_type} files found for match {match_id}")
-            except Exception as e:
-                print(f"Error processing {file_type} files for match {match_id}: {e}")
         
-        # If no files of the specified types were found and fallback_all is True, try downloading all available files
+        # If no files of the specified types were found and fallback_all is True, download all files
         if not all_downloaded and fallback_all:
             print(f"No files of specified types found. Attempting to download all available files...")
-            try:
-                # Use the enhanced SDK method for downloading all files
-                downloaded_files = files_api.download_all_match_files(
-                    match_id=match_id,
-                    output_dir=output_dir,
-                    token=token,
-                    filename_pattern="{match_id}_{filename}"  # Custom naming pattern
-                )
-                
-                if downloaded_files:
-                    all_downloaded.extend(downloaded_files)
-                    print(f"Downloaded {len(downloaded_files)} files of various types for match {match_id}")
-                else:
-                    print(f"No files found for match {match_id}")
-            except Exception as e:
-                print(f"Error downloading all files for match {match_id}: {e}")
+            
+            # Download all available files
+            downloaded = files_api.download_match_files(
+                match_id=match_id,
+                files=all_files,
+                output_dir=output_dir,
+                token=token,
+                filename_pattern="{match_id}_{filename}",
+                progress_callback=report_download_progress,
+                max_concurrent_downloads=max_concurrent
+            )
+            
+            if downloaded:
+                all_downloaded.extend(downloaded)
+                print(f"Downloaded {len(downloaded)} files of various types for match {match_id}")
+            else:
+                print(f"No files found for match {match_id}")
                 
         # Preview files if requested
         if preview and all_downloaded:
@@ -386,13 +276,14 @@ def main():
             output_dir=args.output_dir,
             file_types=file_types,
             preview=args.preview,
-            fallback_all=args.fallback_all
+            fallback_all=args.fallback_all,
+            max_concurrent=args.concurrent
         )
         
         print(f"Downloaded {len(downloaded_files)} files to {os.path.abspath(args.output_dir)}")
         
     else:
-        # Otherwise, get matches by time range and filter
+        # Otherwise, get matches by time range and filter using the SDK method
         max_matches = args.matches
         if max_matches == 0:
             print(f"\nFetching ALL matches from {args.start_date} to {args.end_date} (no limit)")
@@ -409,27 +300,19 @@ def main():
         if args.max_duration:
             print(f"Filtering by maximum duration: {args.max_duration} seconds")
             
-        # Get matches
-        matches = get_matches_by_time_range(
-            sdk=sdk,
+        # Get matches using the SDK extension's get_filtered_matches method
+        filtered_matches = files_api.get_filtered_matches(
             start_date=args.start_date,
             end_date=args.end_date,
+            region_id=args.region_id,
+            game_mode=args.game_mode,
+            min_duration=args.min_duration,
+            max_duration=args.max_duration,
             limit=max_matches,
             batch_size=args.batch_size
         )
         
-        print(f"Found {len(matches)} matches in the specified time range")
-        
-        # Filter matches
-        filtered_matches = filter_matches_by_criteria(
-            matches=matches,
-            region_id=args.region_id,
-            game_mode=args.game_mode,
-            min_duration=args.min_duration,
-            max_duration=args.max_duration
-        )
-        
-        print(f"After filtering: {len(filtered_matches)} matches")
+        print(f"Found {len(filtered_matches)} matches matching the criteria")
         
         # Get logs for each filtered match
         logs_found = 0
@@ -450,7 +333,8 @@ def main():
                 output_dir=args.output_dir,
                 file_types=file_types,
                 preview=(args.preview and i <= 3),  # Only preview first 3 matches
-                fallback_all=args.fallback_all
+                fallback_all=args.fallback_all,
+                max_concurrent=args.concurrent
             )
             
             if downloaded_files:

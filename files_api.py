@@ -1,9 +1,10 @@
 import os
 import re
 import requests
-from typing import List, Dict, Optional, Union, Any, BinaryIO, Set
+from typing import List, Dict, Optional, Union, Any, BinaryIO, Set, Callable
 from enum import Enum, auto
 import time
+from concurrent.futures import ThreadPoolExecutor
 
 class FileTypeConstants:
     """Constants for file types supported by the Files API."""
@@ -738,4 +739,336 @@ class Smite2RallyHereFilesAPI:
             except Exception as e:
                 print(f"Warning: Error downloading {filename}: {e}")
                 
-        return downloaded_files 
+        return downloaded_files
+
+    def _download_file(self, 
+                      url: str, 
+                      headers: Dict[str, str], 
+                      output_path: str,
+                      progress_callback: Optional[Callable[[str, int, int], None]] = None) -> str:
+        """
+        Internal helper method for downloading files with consistent error handling.
+        
+        Args:
+            url: The URL to download from.
+            headers: The headers to use for the request.
+            output_path: The path to save the file to.
+            progress_callback: Optional callback for progress reporting.
+            
+        Returns:
+            The path to the downloaded file.
+            
+        Raises:
+            DownloadError: If the download fails.
+        """
+        try:
+            # Make sure directory exists
+            os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
+            
+            # Download the file
+            response = requests.get(url, headers=headers, stream=True)
+            response.raise_for_status()
+            
+            # Get content length if available
+            total_size = int(response.headers.get('content-length', 0))
+            downloaded = 0
+            
+            with open(output_path, 'wb') as f:
+                for chunk in response.iter_content(chunk_size=8192):
+                    f.write(chunk)
+                    downloaded += len(chunk)
+                    
+                    # Report progress if callback provided and content length known
+                    if progress_callback and total_size > 0:
+                        progress_callback(os.path.basename(output_path), downloaded, total_size)
+            
+            # Final progress report
+            if progress_callback:
+                progress_callback(os.path.basename(output_path), downloaded, downloaded)
+            
+            return output_path
+        except Exception as e:
+            raise DownloadError(f"Failed to download file to {output_path}: {str(e)}")
+
+    def list_all_match_files(self, 
+                            match_id: str, 
+                            token: Optional[str] = None) -> List[Dict[str, Any]]:
+        """
+        List all files for a match from all available endpoints.
+        
+        Args:
+            match_id: The match ID.
+            token: An optional token. If not provided, one will be obtained automatically.
+            
+        Returns:
+            Combined list of file metadata objects from all endpoints.
+            
+        Raises:
+            MatchNotFoundException: If the match is not found.
+        """
+        if token is None:
+            token = self.sdk._get_env_access_token()
+            
+        # Check if the match exists
+        if not self.check_match_exists(match_id, token):
+            raise MatchNotFoundException(f"Match {match_id} not found")
+            
+        all_files = []
+        endpoints = [FileTypeConstants.ENDPOINT_FILE, FileTypeConstants.ENDPOINT_DEVELOPER_FILE]
+        
+        for endpoint in endpoints:
+            try:
+                # Use the correct URL format with endpoint parameter
+                url = f"{self.base_url}/{endpoint}/match/{match_id}"
+                headers = {
+                    "Accept": "application/json",
+                    "Authorization": f"Bearer {token}"
+                }
+                
+                response = requests.get(url, headers=headers)
+                response.raise_for_status()
+                
+                # Extract the files array from the response
+                files = response.json().get("files", [])
+                
+                # Add endpoint info to each file record
+                for file_info in files:
+                    file_info["api_type"] = endpoint
+                    
+                all_files.extend(files)
+            except Exception as e:
+                print(f"Warning: Error listing files from {endpoint}: {str(e)}")
+            
+        return all_files
+
+    def download_match_files(self,
+                           match_id: str,
+                           files: List[Dict[str, Any]],
+                           output_dir: str,
+                           token: Optional[str] = None,
+                           filename_pattern: Optional[str] = None,
+                           progress_callback: Optional[Callable[[str, int, int], None]] = None,
+                           max_concurrent_downloads: int = 3) -> List[str]:
+        """
+        Download multiple files for a match.
+        
+        Args:
+            match_id: The match ID.
+            files: List of file metadata objects.
+            output_dir: The directory to save the files to.
+            token: An optional token. If not provided, one will be obtained automatically.
+            filename_pattern: Optional pattern for saving files. Use {match_id} and {filename} as placeholders.
+            progress_callback: Optional callback for progress reporting.
+            max_concurrent_downloads: Maximum number of concurrent downloads (default: 3).
+            
+        Returns:
+            A list of paths to the downloaded files.
+            
+        Raises:
+            DownloadError: If a download fails.
+        """
+        if token is None:
+            token = self.sdk._get_env_access_token()
+            
+        # Make sure the output directory exists
+        os.makedirs(output_dir, exist_ok=True)
+        
+        # Define the download function for a single file
+        def download_single_file(file_info):
+            filename = file_info.get("name", "")
+            if not filename:
+                return None
+            
+            # Apply filename pattern if provided
+            if filename_pattern:
+                output_filename = filename_pattern.format(match_id=match_id, filename=filename)
+            else:
+                output_filename = filename
+            
+            # Determine output path
+            output_path = os.path.join(output_dir, output_filename)
+            
+            # Get API type for URL construction
+            api_type = file_info.get("api_type", "file")
+            
+            # Download the file
+            url = f"{self.base_url}/{api_type}/match/{match_id}/{filename}"
+            headers = {
+                "Authorization": f"Bearer {token}"
+            }
+            
+            try:
+                downloaded_path = self._download_file(url, headers, output_path, progress_callback)
+                print(f"Downloaded: {os.path.basename(output_path)}")
+                return downloaded_path
+            except Exception as e:
+                print(f"Warning: Error downloading {filename}: {e}")
+                return None
+        
+        # Download files concurrently with a thread pool
+        downloaded_files = []
+        if max_concurrent_downloads <= 1:
+            # Sequential download
+            for file_info in files:
+                result = download_single_file(file_info)
+                if result:
+                    downloaded_files.append(result)
+        else:
+            # Concurrent download
+            with ThreadPoolExecutor(max_workers=max_concurrent_downloads) as executor:
+                results = list(executor.map(download_single_file, files))
+                downloaded_files = [r for r in results if r]
+            
+        return downloaded_files
+
+    def get_filtered_matches(self,
+                            start_date: str,
+                            end_date: str,
+                            region_id: Optional[str] = None,
+                            game_mode: Optional[str] = None,
+                            min_duration: Optional[int] = None,
+                            max_duration: Optional[int] = None,
+                            limit: int = 10,
+                            batch_size: int = 100) -> List[Dict[str, Any]]:
+        """
+        Get matches filtered by various criteria.
+        
+        Args:
+            start_date: Start date in YYYY-MM-DD format.
+            end_date: End date in YYYY-MM-DD format.
+            region_id: Optional region ID to filter by.
+            game_mode: Optional game mode to filter by.
+            min_duration: Optional minimum match duration in seconds.
+            max_duration: Optional maximum match duration in seconds.
+            limit: Maximum number of matches to return (0 for no limit).
+            batch_size: Number of matches to request per API call.
+            
+        Returns:
+            List of filtered match data.
+        """
+        token = self.sdk._get_env_access_token()
+        
+        # Format dates as ISO 8601
+        start_time = f"{start_date}T00:00:00Z"
+        end_time = f"{end_date}T23:59:59Z"
+        
+        url = f"{self.sdk.env_base_url}/match/v1/match"
+        
+        params = {
+            "start_time": start_time,
+            "end_time": end_time,
+            "page_size": min(batch_size, 100),  # Max 100 per page
+            "status": "closed"
+        }
+        
+        headers = {
+            "Accept": "application/json",
+            "Authorization": f"Bearer {token}"
+        }
+        
+        all_matches = []
+        matches_processed = 0
+        cursor = None
+        no_limit = (limit == 0)
+        
+        try:
+            # Fetch matches with pagination
+            while no_limit or matches_processed < limit:
+                if cursor:
+                    params["cursor"] = cursor
+                
+                response = requests.get(url, headers=headers, params=params)
+                response.raise_for_status()
+                data = response.json()
+                
+                matches = data.get("matches", [])
+                if not matches:
+                    break
+                
+                # Filter matches based on criteria
+                filtered_batch = self._filter_matches_by_criteria(
+                    matches,
+                    region_id=region_id,
+                    game_mode=game_mode,
+                    min_duration=min_duration,
+                    max_duration=max_duration
+                )
+                
+                all_matches.extend(filtered_batch)
+                matches_processed += len(matches)
+                
+                cursor = data.get("cursor")
+                if not cursor:
+                    break
+                
+                # Print progress for large fetches
+                if matches_processed % 100 == 0:
+                    print(f"Fetched {matches_processed} matches so far...")
+                
+                # Add a small delay to avoid rate limiting
+                time.sleep(0.1)
+        except Exception as e:
+            print(f"Error fetching matches: {e}")
+            # Add a longer delay after an error
+            time.sleep(1)
+        
+        if limit > 0 and len(all_matches) > limit:
+            return all_matches[:limit]
+        return all_matches
+
+    def _filter_matches_by_criteria(self,
+                                   matches: List[Dict[str, Any]],
+                                   region_id: Optional[str] = None,
+                                   game_mode: Optional[str] = None,
+                                   min_duration: Optional[int] = None,
+                                   max_duration: Optional[int] = None) -> List[Dict[str, Any]]:
+        """
+        Internal method to filter matches by criteria.
+        
+        Args:
+            matches: List of match data dictionaries.
+            region_id: Optional region ID to filter by.
+            game_mode: Optional game mode to filter by.
+            min_duration: Optional minimum match duration in seconds.
+            max_duration: Optional maximum match duration in seconds.
+            
+        Returns:
+            List of filtered match data.
+        """
+        filtered = []
+        
+        for match in matches:
+            # Check duration if specified
+            if min_duration is not None and (
+                "duration_seconds" not in match or 
+                match.get("duration_seconds", 0) < min_duration
+            ):
+                continue
+            
+            if max_duration is not None and (
+                "duration_seconds" in match and 
+                match.get("duration_seconds", 0) > max_duration
+            ):
+                continue
+            
+            # Extract instances data
+            instances = match.get("instances", [])
+            if not instances:
+                continue
+            
+            # Use the first instance for filtering
+            instance = instances[0]
+            
+            # Check if the match meets all filter criteria
+            if region_id and instance.get("region_id") != region_id:
+                continue
+            
+            if game_mode:
+                instance_game_mode = instance.get("game_mode", "")
+                if game_mode.lower() not in instance_game_mode.lower():
+                    continue
+                
+            # If we reach here, the match has passed all filters
+            filtered.append(match)
+        
+        return filtered 
