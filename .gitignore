@@ -1,0 +1,39 @@
+# Environment variables and credentials
+.env
+*.env
+
+# Python cache and virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+.cursor/
+.specstory/
+
+# Output directories and downloaded files
+match_logs/
+chat_logs/
+test_match_files/
+filtered_match_files/
+*.log
+*.json.tmp
+
+# Byte-compiled files
+*.so
+*.pyd
+*.dll
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/ 
