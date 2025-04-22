@@ -2,7 +2,123 @@ import os
 import requests
 import base64
 import json
-from typing import Optional, List, Union
+from typing import Optional, List, Union, Dict, Set, Callable, Any
+import time
+from datetime import datetime, timezone
+
+from files_api import Smite2RallyHereFilesAPI
+
+class MatchFilter:
+    """Base class for match filtering."""
+    
+    def apply(self, match: Dict[str, Any]) -> bool:
+        """
+        Apply the filter to a match.
+        
+        Args:
+            match: The match dictionary to filter.
+            
+        Returns:
+            bool: True if the match passes the filter, False otherwise.
+        """
+        raise NotImplementedError("Subclasses must implement apply()")
+    
+    def __and__(self, other: 'MatchFilter') -> 'AndFilter':
+        """Combine with another filter using AND logic."""
+        return AndFilter(self, other)
+    
+    def __or__(self, other: 'MatchFilter') -> 'OrFilter':
+        """Combine with another filter using OR logic."""
+        return OrFilter(self, other)
+
+class AndFilter(MatchFilter):
+    """Filter that combines two filters with AND logic."""
+    
+    def __init__(self, filter1: MatchFilter, filter2: MatchFilter):
+        self.filter1 = filter1
+        self.filter2 = filter2
+    
+    def apply(self, match: Dict[str, Any]) -> bool:
+        return self.filter1.apply(match) and self.filter2.apply(match)
+
+class OrFilter(MatchFilter):
+    """Filter that combines two filters with OR logic."""
+    
+    def __init__(self, filter1: MatchFilter, filter2: MatchFilter):
+        self.filter1 = filter1
+        self.filter2 = filter2
+    
+    def apply(self, match: Dict[str, Any]) -> bool:
+        return self.filter1.apply(match) or self.filter2.apply(match)
+
+class DurationFilter(MatchFilter):
+    """Filter matches by duration."""
+    
+    def __init__(self, min_duration: Optional[int] = None, max_duration: Optional[int] = None):
+        self.min_duration = min_duration
+        self.max_duration = max_duration
+    
+    def apply(self, match: Dict[str, Any]) -> bool:
+        duration = match.get("duration_seconds", 0)
+        
+        if self.min_duration is not None and duration < self.min_duration:
+            return False
+        
+        if self.max_duration is not None and duration > self.max_duration:
+            return False
+        
+        return True
+
+class RegionFilter(MatchFilter):
+    """Filter matches by region ID."""
+    
+    def __init__(self, region_id: str):
+        self.region_id = region_id
+    
+    def apply(self, match: Dict[str, Any]) -> bool:
+        instances = match.get("instances", [])
+        if not instances:
+            return False
+        
+        # Check if any instance matches the region ID
+        return any(instance.get("region_id") == self.region_id for instance in instances)
+
+class GameModeFilter(MatchFilter):
+    """Filter matches by game mode."""
+    
+    def __init__(self, game_mode: str):
+        self.game_mode = game_mode
+    
+    def apply(self, match: Dict[str, Any]) -> bool:
+        instances = match.get("instances", [])
+        if not instances:
+            return False
+        
+        # Check if any instance's game mode contains the specified game mode
+        return any(self.game_mode in instance.get("game_mode", "") for instance in instances)
+
+class HostTypeFilter(MatchFilter):
+    """Filter matches by host type."""
+    
+    def __init__(self, host_type: str):
+        self.host_type = host_type
+    
+    def apply(self, match: Dict[str, Any]) -> bool:
+        instances = match.get("instances", [])
+        if not instances:
+            return False
+        
+        # Check if any instance matches the host type
+        return any(instance.get("host_type") == self.host_type for instance in instances)
+
+class CustomFilter(MatchFilter):
+    """Filter matches using a custom function."""
+    
+    def __init__(self, filter_func: Callable[[Dict[str, Any]], bool]):
+        self.filter_func = filter_func
+    
+    def apply(self, match: Dict[str, Any]) -> bool:
+        return self.filter_func(match)
 
 class Smite2RallyHereSDK:
     """
@@ -48,6 +164,9 @@ class Smite2RallyHereSDK:
         if not self.dev_client_id or not self.dev_secret_key or not self.dev_base_url:
             raise ValueError("Missing dev credentials or base URL; "
                              "provide dev_client_id/dev_secret_key/dev_base_url or set environment variables.")
+
+        # Initialize the FilesAPI extension
+        self.files = Smite2RallyHereFilesAPI(self)
 
     # -------------------------------------------------------------------------
     # ENV API: Environment Token & Fetch Methods
@@ -1185,3 +1304,242 @@ class Smite2RallyHereSDK:
         except requests.exceptions.RequestException as e:
             print(f"Error fetching product sandboxes: {e}")
             raise
+
+    def rh_fetch_matches_by_time_range(
+        self, 
+        token: str,
+        start_time: Optional[str] = None,
+        end_time: Optional[str] = None,
+        min_duration: Optional[int] = None,
+        max_duration: Optional[int] = None,
+        region_id: Optional[str] = None,
+        game_mode: Optional[str] = None,
+        limit: int = 10,
+        page_size: int = 10,
+        status: str = "closed",
+        callback: Optional[callable] = None,
+        filters: Optional[List[MatchFilter]] = None
+    ) -> List[Dict[str, Any]]:
+        """
+        Fetch matches within a specified time range with filtering options.
+        
+        Args:
+            token: A valid environment token.
+            start_time: Optional start time in ISO 8601 format (e.g., "2023-01-01T00:00:00Z").
+            end_time: Optional end time in ISO 8601 format.
+            min_duration: Optional minimum match duration in seconds.
+            max_duration: Optional maximum match duration in seconds.
+            region_id: Optional region ID filter (e.g., "1", "2").
+            game_mode: Optional game mode filter (e.g., "Conquest", "Arena").
+            limit: Maximum number of matches to return (default: 10, use 0 for all).
+            page_size: Number of matches per page (default: 10).
+            status: Match status filter (default: "closed").
+            callback: Optional callback function(matches_so_far, count) for progress updates.
+            filters: Optional list of additional MatchFilter objects to apply.
+            
+        Returns:
+            A list of match dictionaries.
+            
+        Note:
+            The server API doesn't directly support all filters, so some are applied client-side.
+        """
+        url = f"{self.env_base_url}/match/v1/match"
+        params = {"page_size": page_size, "status": status}
+        
+        if start_time:
+            params["start_time"] = start_time
+        if end_time:
+            params["end_time"] = end_time
+            
+        headers = {
+            'Accept': 'application/json',
+            'Authorization': f'Bearer {token}'
+        }
+        
+        # Combine standard filters with custom filters
+        all_filters = []
+        
+        if min_duration is not None or max_duration is not None:
+            all_filters.append(DurationFilter(min_duration, max_duration))
+        
+        if region_id is not None:
+            all_filters.append(RegionFilter(region_id))
+            
+        if game_mode is not None:
+            all_filters.append(GameModeFilter(game_mode))
+            
+        # Add custom filters
+        if filters:
+            all_filters.extend(filters)
+        
+        all_matches = []
+        matches_processed = 0
+        cursor = None
+        no_limit = (limit == 0)
+        
+        # Fetch matches with pagination
+        while no_limit or matches_processed < limit:
+            if cursor:
+                params["cursor"] = cursor
+                
+            try:
+                response = requests.get(url, headers=headers, params=params)
+                response.raise_for_status()
+                data = response.json()
+                
+                matches = data.get("matches", [])
+                if not matches:
+                    break
+                    
+                # Apply all filters
+                filtered_matches = self._apply_filters(matches, all_filters)
+                
+                all_matches.extend(filtered_matches)
+                matches_processed += len(matches)  # Count original matches for pagination
+                
+                # Call the callback if provided
+                if callback and filtered_matches:
+                    callback(all_matches, len(all_matches))
+                
+                # Get the next page cursor
+                cursor = data.get("cursor")
+                if not cursor:
+                    break
+                    
+                # Small delay to avoid rate limiting
+                time.sleep(0.1)
+                
+            except Exception as e:
+                print(f"Error fetching matches: {e}")
+                # Add a longer delay after an error
+                time.sleep(1)
+                break
+        
+        # Apply limit if specified
+        if limit > 0:
+            return all_matches[:limit]
+        return all_matches
+    
+    def _apply_filters(self, matches: List[Dict[str, Any]], filters: List[MatchFilter]) -> List[Dict[str, Any]]:
+        """
+        Apply all filters to a list of matches.
+        
+        Args:
+            matches: List of match dictionaries to filter.
+            filters: List of MatchFilter objects to apply.
+            
+        Returns:
+            A list of filtered match dictionaries.
+        """
+        if not filters:
+            return matches
+            
+        filtered = []
+        for match in matches:
+            # A match passes if it passes all filters
+            if all(filter_obj.apply(match) for filter_obj in filters):
+                filtered.append(match)
+                
+        return filtered
+    
+    def _filter_matches(
+        self,
+        matches: List[dict],
+        min_duration: Optional[int] = None,
+        max_duration: Optional[int] = None,
+        region_id: Optional[str] = None,
+        game_mode: Optional[str] = None
+    ) -> List[dict]:
+        """
+        Legacy method to filter matches by various criteria.
+        This is kept for backward compatibility.
+        """
+        filters = []
+        
+        if min_duration is not None or max_duration is not None:
+            filters.append(DurationFilter(min_duration, max_duration))
+            
+        if region_id is not None:
+            filters.append(RegionFilter(region_id))
+            
+        if game_mode is not None:
+            filters.append(GameModeFilter(game_mode))
+            
+        return self._apply_filters(matches, filters)
+        
+    def rh_fetch_match_by_id(
+        self,
+        match_id: str,
+        token: str
+    ) -> dict:
+        """
+        Fetch a single match by its ID.
+        
+        Args:
+            match_id: The UUID of the match.
+            token: A valid environment token.
+            
+        Returns:
+            A dictionary containing the match details.
+            
+        Raises:
+            requests.exceptions.HTTPError: If the request fails.
+            FileNotFoundError: If the match doesn't exist.
+        """
+        url = f"{self.env_base_url}/match/v1/match/{match_id}"
+        headers = {
+            "Accept": "application/json",
+            "Authorization": f"Bearer {token}"
+        }
+        
+        response = requests.get(url, headers=headers)
+        
+        if response.status_code == 404:
+            raise FileNotFoundError(f"Match with ID {match_id} not found")
+            
+        response.raise_for_status()
+        return response.json()
+    
+    def S2_fetch_matches_by_time_range(
+        self,
+        start_time: Optional[str] = None,
+        end_time: Optional[str] = None,
+        limit: int = 10,
+        page_size: int = 10,
+        status: str = "closed"
+    ) -> list:
+        """
+        Fetch and transform matches within a specified time range into SMITE 2 format.
+        
+        This method calls rh_fetch_matches_by_time_range and transforms the results
+        into a SMITE 2 friendly format.
+        
+        Args:
+            start_time: ISO 8601 formatted timestamp for the start of the time range (e.g., "2025-04-20T00:00:00Z").
+            end_time: ISO 8601 formatted timestamp for the end of the time range (e.g., "2025-04-22T23:59:59Z").
+            limit: Maximum total number of matches to return.
+            page_size: Number of matches to return per page (default: 10).
+            status: Match status to filter by (default: "closed").
+            
+        Returns:
+            A list of matches in SMITE 2 format.
+            
+        Raises:
+            requests.exceptions.HTTPError: If the request fails.
+            ValueError: If provided parameters are invalid.
+        """
+        token = self._get_env_access_token()
+        
+        raw_matches = self.rh_fetch_matches_by_time_range(
+            token=token,
+            start_time=start_time,
+            end_time=end_time,
+            limit=limit,
+            page_size=page_size,
+            status=status
+        )
+        
+        # Transform the raw matches data
+        s2_matches = self.S2_transform_matches_by_instance(raw_matches)
+        
+        return s2_matches

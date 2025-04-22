@@ -1,5 +1,16 @@
 import os
 import json
+from dotenv import load_dotenv, find_dotenv
+import datetime
+
+# Explicitly find and load the .env file
+env_file = find_dotenv()
+if env_file:
+    print(f"Loading environment from: {env_file}")
+    load_dotenv(env_file)
+else:
+    print("No .env file found, will use existing environment variables")
+
 from smite2_rh_sdk import Smite2RallyHereSDK
 
 # ------------------------------------------------------------------------------
@@ -26,11 +37,31 @@ ENABLE_S2_SUMMARIZE_BUILDS_BY_PLAYER_WITH_DISPLAYNAME = False
 ENABLE_S2_FETCH_FULL_PLAYER_DATA_BY_DISPLAYNAME = False
 ENABLE_RH_FETCH_PLAYER_RANKS_BY_UUID = False
 ENABLE_GET_ALL_ORG_PRODUCTS = False #PERMISSIONS ISSUE
-ENABLE_GET_SANDBOXES_FOR_PRODUCT = True
+ENABLE_GET_SANDBOXES_FOR_PRODUCT = False
+# Files API methods
+ENABLE_S2_GET_MATCH_COMBAT_LOG = False
+ENABLE_S2_GET_MATCH_CHAT_LOG = False
+ENABLE_S2_GET_MATCH_LOGS = False
+ENABLE_S2_GET_MATCH_FILES_BY_TYPE = False
+# Time range match methods
+ENABLE_RH_FETCH_MATCHES_BY_TIME_RANGE = True
+ENABLE_S2_FETCH_MATCHES_BY_TIME_RANGE = True
 
 # This controls how many matches are pulled by S2_fetch_full_player_data_by_displayname,
 # as well as S2_fetch_matches_by_player_uuid, etc.
 MAX_MATCHES_TO_TEST = 2
+
+# Example time range for matches
+# Using ISO 8601 format: YYYY-MM-DDThh:mm:ssZ
+# One week time range ending at the current time
+current_time = datetime.datetime.utcnow()
+# Start time is 7 days ago
+start_time = (current_time - datetime.timedelta(days=7)).strftime("%Y-%m-%dT%H:%M:%SZ")
+# End time is current time
+end_time = current_time.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+# Maximum matches to retrieve in one query
+MAX_MATCHES_TIME_RANGE = 20
 
 # You can quickly change the test values here:
 # These IDs are examples—adjust them according to your environment or scenario.
@@ -56,6 +87,11 @@ DISPLAY_NAME_TO_TEST = "Weak3n"
 # Example setting type and key for the new rh_fetch_player_setting endpoint
 SETTING_TYPE_ID_TO_TEST = "godloadouts"
 SETTING_KEY_TO_TEST = "cardVFXItemId"
+
+# Example match ID, session ID, and instance ID for Files API
+MATCH_ID_TO_TEST = "28257fd8-88c1-40ed-9bad-4151bcc601a5"
+SESSION_ID_TO_TEST = "60ce5622-4b06-44f3-8663-0030d6c23d11"
+FILE_OUTPUT_DIR = "match_files_examples"
 
 # ------------------------------------------------------------------------------
 # Helper function to save JSON responses
@@ -300,7 +336,153 @@ def main():
         except Exception as e:
             print(f"Error calling get_all_sandboxes_for_product: {e}")
 
-    print("Done running all example SDK calls.")
+    # Files API endpoints
+    # Note: For these endpoints, we'll need to import the FileApiMethods class
+    # and attach it to the SDK to simulate integration
+    if ENABLE_S2_GET_MATCH_COMBAT_LOG or ENABLE_S2_GET_MATCH_CHAT_LOG or ENABLE_S2_GET_MATCH_LOGS or ENABLE_S2_GET_MATCH_FILES_BY_TYPE:
+        try:
+            # Import the FileApiMethods class
+            from files_api_sdk_extension import FileApiMethods
+            
+            # Create a FileApiMethods instance and attach SDK properties
+            file_api = FileApiMethods()
+            file_api.env_base_url = sdk.env_base_url
+            file_api._get_env_access_token = sdk._get_env_access_token
+            
+            # Create output directory
+            os.makedirs(FILE_OUTPUT_DIR, exist_ok=True)
+            
+            # S2_get_match_combat_log: Get the combat log for a match
+            if ENABLE_S2_GET_MATCH_COMBAT_LOG:
+                try:
+                    combat_log_path = file_api.S2_get_match_combat_log(
+                        MATCH_ID_TO_TEST,
+                        output_dir=FILE_OUTPUT_DIR
+                    )
+                    # Since this returns a file path, let's save the metadata
+                    log_info = {
+                        "match_id": MATCH_ID_TO_TEST, 
+                        "file_path": combat_log_path,
+                        "success": combat_log_path is not None
+                    }
+                    save_json(log_info, "S2_get_match_combat_log")
+                except Exception as e:
+                    print(f"Error calling S2_get_match_combat_log: {e}")
+            
+            # S2_get_match_chat_log: Get the chat log for a match
+            if ENABLE_S2_GET_MATCH_CHAT_LOG:
+                try:
+                    chat_log_path = file_api.S2_get_match_chat_log(
+                        MATCH_ID_TO_TEST,
+                        SESSION_ID_TO_TEST,
+                        FILE_OUTPUT_DIR
+                    )
+                    # Since this returns a file path, let's save the metadata
+                    log_info = {
+                        "match_id": MATCH_ID_TO_TEST, 
+                        "session_id": SESSION_ID_TO_TEST,
+                        "file_path": chat_log_path,
+                        "success": chat_log_path is not None
+                    }
+                    save_json(log_info, "S2_get_match_chat_log")
+                except Exception as e:
+                    print(f"Error calling S2_get_match_chat_log: {e}")
+            
+            # S2_get_match_logs: Get all logs for a match
+            if ENABLE_S2_GET_MATCH_LOGS:
+                try:
+                    logs = file_api.S2_get_match_logs(
+                        MATCH_ID_TO_TEST,
+                        FILE_OUTPUT_DIR
+                    )
+                    # Since this returns a dictionary of file paths, let's save the metadata
+                    log_info = {
+                        "match_id": MATCH_ID_TO_TEST,
+                        "file_count": len(logs),
+                        "files": {name: path for name, path in logs.items()}
+                    }
+                    save_json(log_info, "S2_get_match_logs")
+                except Exception as e:
+                    print(f"Error calling S2_get_match_logs: {e}")
+            
+            # S2_get_match_files_by_type: Get files by type using friendly names
+            if ENABLE_S2_GET_MATCH_FILES_BY_TYPE:
+                try:
+                    # Example 1: Get specific file types
+                    logs_by_type = file_api.S2_get_match_files_by_type(
+                        MATCH_ID_TO_TEST,
+                        file_types=["ChatLog", "Diagnostics"],
+                        session_id=SESSION_ID_TO_TEST,
+                        output_dir=FILE_OUTPUT_DIR
+                    )
+                    
+                    # Save the results
+                    results = {
+                        "match_id": MATCH_ID_TO_TEST,
+                        "session_id": SESSION_ID_TO_TEST,
+                        "file_types_requested": ["ChatLog", "Diagnostics"],
+                        "file_count": len(logs_by_type),
+                        "files": {name: path for name, path in logs_by_type.items()}
+                    }
+                    save_json(results, "S2_get_match_files_by_type")
+                    
+                    # Example 2: Get all file types (for documentation)
+                    all_file_types = file_api.S2_get_match_files_by_type(
+                        MATCH_ID_TO_TEST,
+                        file_types="All",
+                        session_id=SESSION_ID_TO_TEST,
+                        output_dir=FILE_OUTPUT_DIR
+                    )
+                    
+                    # Save the results
+                    all_results = {
+                        "match_id": MATCH_ID_TO_TEST,
+                        "session_id": SESSION_ID_TO_TEST,
+                        "file_types_requested": "All",
+                        "file_count": len(all_file_types),
+                        "files": {name: path for name, path in all_file_types.items()}
+                    }
+                    save_json(all_results, "S2_get_match_files_by_type_all")
+                except Exception as e:
+                    print(f"Error calling S2_get_match_files_by_type: {e}")
+        except ImportError as e:
+            print(f"Error importing FileApiMethods: {e}")
+
+    print("\nDone running all example SDK calls.")
+
+    # Time range match methods
+    # Test rh_fetch_matches_by_time_range
+    if ENABLE_RH_FETCH_MATCHES_BY_TIME_RANGE:
+        try:
+            print(f"\nFetching matches by time range: {start_time} to {end_time}")
+            matches_by_time = sdk.rh_fetch_matches_by_time_range(
+                token=env_token,
+                start_time=start_time,
+                end_time=end_time,
+                limit=MAX_MATCHES_TIME_RANGE,
+                page_size=MAX_MATCHES_TIME_RANGE,
+                status="closed"
+            )
+            save_json(matches_by_time, "rh_fetch_matches_by_time_range")
+            print(f"Retrieved {len(matches_by_time.get('data', []))} matches by time range")
+        except Exception as e:
+            print(f"Error calling rh_fetch_matches_by_time_range: {e}")
+    
+    # Test S2_fetch_matches_by_time_range
+    if ENABLE_S2_FETCH_MATCHES_BY_TIME_RANGE:
+        try:
+            print(f"\nFetching and transforming matches by time range: {start_time} to {end_time}")
+            s2_matches_by_time = sdk.S2_fetch_matches_by_time_range(
+                start_time=start_time,
+                end_time=end_time,
+                limit=MAX_MATCHES_TIME_RANGE,
+                page_size=MAX_MATCHES_TIME_RANGE,
+                status="closed"
+            )
+            save_json(s2_matches_by_time, "S2_fetch_matches_by_time_range")
+            print(f"Retrieved and transformed {len(s2_matches_by_time)} matches by time range")
+        except Exception as e:
+            print(f"Error calling S2_fetch_matches_by_time_range: {e}")
 
 if __name__ == "__main__":
     main() 
