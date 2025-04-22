@@ -14,13 +14,17 @@ Options:
   --min-duration SECS  Minimum match duration in seconds
   --max-duration SECS  Maximum match duration in seconds
   --matches COUNT      Maximum matches to process (default: 10, use 0 for no limit)
-  --output-dir DIR     Directory to save files (default: match_logs)
+  --output-dir DIR     Directory to save files (default: chat_logs)
   --match-id ID        Specific match ID to retrieve (overrides filters)
   --batch-size SIZE    Number of matches to request per API call (default: 100)
   --file-types TYPES   Comma-separated list of file types to download (default: CHAT_LOG)
                        Options: CHAT_LOG, COMBAT_LOG, CONSOLE_LOG, etc.
   --preview            Preview the contents of downloaded files
   --fallback-all       Download all available files if no files of the specified types are found
+
+Note:
+  This script saves all files in a single directory (by default 'chat_logs'), 
+  using a unique naming pattern: "{match_id}_{original_filename}".
 """
 
 import os
@@ -62,8 +66,8 @@ def parse_args():
     # Other options
     parser.add_argument("--matches", type=int, default=10,
                        help="Maximum matches to process (default: 10, use 0 for no limit)")
-    parser.add_argument("--output-dir", type=str, default="match_logs",
-                       help="Directory to save files (default: match_logs)")
+    parser.add_argument("--output-dir", type=str, default="chat_logs",
+                       help="Directory to save files (default: chat_logs)")
     parser.add_argument("--match-id", type=str,
                        help="Specific match ID to retrieve (overrides filters)")
     parser.add_argument("--batch-size", type=int, default=100,
@@ -280,9 +284,8 @@ def download_match_logs(files_api: Smite2RallyHereFilesAPI, match_id: str,
     Returns:
         List of paths to downloaded files.
     """
-    # Create match-specific output directory
-    match_dir = os.path.join(output_dir, match_id)
-    os.makedirs(match_dir, exist_ok=True)
+    # Create output directory if it doesn't exist (but don't create match subdirectories)
+    os.makedirs(output_dir, exist_ok=True)
     
     all_downloaded = []
     
@@ -290,14 +293,49 @@ def download_match_logs(files_api: Smite2RallyHereFilesAPI, match_id: str,
         # Try to download specified file types
         for file_type in file_types:
             try:
-                downloaded = files_api.download_match_file_by_type(
-                    match_id=match_id,
-                    file_type=file_type, 
-                    output_dir=match_dir
-                )
-                if downloaded:
-                    all_downloaded.extend(downloaded)
-                    print(f"Downloaded {len(downloaded)} {file_type} files for match {match_id}")
+                # Create unique filenames for each file by including match_id
+                # This is needed since we're storing all files in a single directory
+                original_files = files_api.filter_match_files_by_type(match_id, file_type)
+                
+                # Download each file with a modified filename
+                for file_info in original_files:
+                    original_name = file_info.get("name", "")
+                    if not original_name:
+                        continue
+                        
+                    # Create a unique filename by prepending match_id
+                    base_name, ext = os.path.splitext(original_name)
+                    unique_name = f"{match_id}_{original_name}"
+                    output_path = os.path.join(output_dir, unique_name)
+                    
+                    try:
+                        # Download using original name but save to unique path
+                        url = None
+                        api_type = file_info.get("api_type", "file")
+                        token = files_api.sdk._get_env_access_token()
+                        
+                        # Use direct URL download
+                        url = f"{files_api.base_url}/{api_type}/match/{match_id}/{original_name}"
+                        
+                        headers = {
+                            "Authorization": f"Bearer {token}"
+                        }
+                        
+                        response = requests.get(url, headers=headers, stream=True)
+                        response.raise_for_status()
+                        
+                        # Save the file
+                        with open(output_path, 'wb') as f:
+                            for chunk in response.iter_content(chunk_size=8192):
+                                f.write(chunk)
+                        
+                        all_downloaded.append(output_path)
+                        print(f"Downloaded: {unique_name}")
+                    except Exception as e:
+                        print(f"Error downloading {original_name}: {e}")
+                
+                if all_downloaded:
+                    print(f"Downloaded {len(all_downloaded)} {file_type} files for match {match_id}")
             except FileNotFoundException:
                 print(f"No {file_type} files found for match {match_id}")
             except Exception as e:
@@ -307,13 +345,54 @@ def download_match_logs(files_api: Smite2RallyHereFilesAPI, match_id: str,
         if not all_downloaded and fallback_all:
             print(f"No files of specified types found. Attempting to download all available files...")
             try:
-                downloaded = files_api.download_all_match_files(
-                    match_id=match_id,
-                    output_dir=match_dir
-                )
-                if downloaded:
-                    all_downloaded.extend(downloaded)
-                    print(f"Downloaded {len(downloaded)} files of various types for match {match_id}")
+                # Get all files
+                all_files = []
+                api_types = ["file", "developer-file"]
+                
+                for api_type in api_types:
+                    try:
+                        files = files_api.list_match_files(match_id, token=None, file_type=api_type)
+                        all_files.extend(files)
+                    except Exception as e:
+                        print(f"Warning: Error getting files from {api_type}: {str(e)}")
+                
+                # Download each file with a unique name
+                for file_info in all_files:
+                    original_name = file_info.get("name", "")
+                    if not original_name:
+                        continue
+                        
+                    # Create a unique filename by prepending match_id
+                    unique_name = f"{match_id}_{original_name}"
+                    output_path = os.path.join(output_dir, unique_name)
+                    
+                    try:
+                        # Download using original name but save to unique path
+                        api_type = file_info.get("api_type", "file")
+                        token = files_api.sdk._get_env_access_token()
+                        
+                        # Use direct URL download
+                        url = f"{files_api.base_url}/{api_type}/match/{match_id}/{original_name}"
+                        
+                        headers = {
+                            "Authorization": f"Bearer {token}"
+                        }
+                        
+                        response = requests.get(url, headers=headers, stream=True)
+                        response.raise_for_status()
+                        
+                        # Save the file
+                        with open(output_path, 'wb') as f:
+                            for chunk in response.iter_content(chunk_size=8192):
+                                f.write(chunk)
+                        
+                        all_downloaded.append(output_path)
+                        print(f"Downloaded: {unique_name}")
+                    except Exception as e:
+                        print(f"Error downloading {original_name}: {e}")
+                
+                if all_downloaded:
+                    print(f"Downloaded {len(all_downloaded)} files of various types for match {match_id}")
             except Exception as e:
                 print(f"Error downloading all files for match {match_id}: {e}")
                 
@@ -336,6 +415,10 @@ def main():
     # Parse command-line arguments
     args = parse_args()
     
+    # Set the default output directory to "chat_logs" if not specified
+    if args.output_dir == "match_logs":  # If it's the old default
+        args.output_dir = "chat_logs"
+        
     # Find and load .env file
     env_file = find_dotenv()
     if env_file:
@@ -369,7 +452,7 @@ def main():
             fallback_all=args.fallback_all
         )
         
-        print(f"Downloaded {len(downloaded_files)} files for match {args.match_id}")
+        print(f"Downloaded {len(downloaded_files)} files to {os.path.abspath(args.output_dir)}")
         
     else:
         # Otherwise, get matches by time range and filter
@@ -444,7 +527,7 @@ def main():
         
         print(f"\nSummary: Found files for {logs_found} out of {total_matches} filtered matches")
         print(f"Total files downloaded: {files_downloaded}")
-        print(f"All logs saved to: {os.path.abspath(args.output_dir)}")
+        print(f"All logs saved to: {os.path.abspath(args.output_dir)} (without match-specific subdirectories)")
 
 if __name__ == "__main__":
     main() 
