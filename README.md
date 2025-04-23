@@ -8,6 +8,9 @@ A Python SDK for interacting with Smite 2 data through the RallyHere APIs. This 
 - Match data access (match details, timeline, stats)
 - Match filtering and searching (by time range, player, game mode, etc.)
 - Files API for accessing match logs and other files
+  - Automatic endpoint selection for different file types
+  - Concurrent downloads with progress reporting
+  - Customizable file naming patterns
 - Utilities for data transformation and filtering
 
 ## Installation
@@ -65,15 +68,16 @@ The Files API extension allows you to retrieve and download files associated wit
 
 ```python
 from smite2_rh_sdk import Smite2RallyHereSDK
-from files_api import FileTypeConstants
+from files_api import Smite2RallyHereFilesAPI, FileTypeConstants
 from dotenv import load_dotenv
 import os
 
 # Load environment variables
 load_dotenv()
 
-# Initialize the SDK
+# Initialize the SDK and Files API
 sdk = Smite2RallyHereSDK()
+files_api = Smite2RallyHereFilesAPI(sdk)
 
 # Define match and output directory
 match_id = "28257fd8-88c1-40ed-9bad-4151bcc601a5"
@@ -81,28 +85,48 @@ output_dir = "match_files"
 os.makedirs(output_dir, exist_ok=True)
 
 # Check if match exists
-if sdk.files.check_match_exists(match_id):
-    # List all files for the match
-    match_files = sdk.files.list_match_files(match_id)
-    print(f"Found {len(match_files)} files for match {match_id}")
+if files_api.check_match_exists(match_id):
+    # List all files for the match from all endpoints
+    all_files = files_api.list_all_match_files(match_id)
+    print(f"Found {len(all_files)} files for match {match_id}")
     
-    # Download combat log
-    try:
-        combat_log_path = sdk.files.download_combat_log(match_id, output_dir=output_dir)
-        print(f"Combat log downloaded to: {combat_log_path}")
-    except Exception as e:
-        print(f"Error downloading combat log: {str(e)}")
+    # Progress callback function
+    def report_progress(filename, downloaded, total):
+        if total > 0:
+            percent = (downloaded / total) * 100
+            print(f"\rDownloading {filename}: {percent:.1f}% complete", end="")
+        if downloaded == total:
+            print()  # Add newline when complete
     
-    # Download chat log
-    try:
-        chat_log_path = sdk.files.download_chat_log(match_id, output_dir=output_dir)
-        print(f"Chat log downloaded to: {chat_log_path}")
-    except Exception as e:
-        print(f"Error downloading chat log: {str(e)}")
+    # Download combat logs with progress reporting
+    combat_logs = files_api.download_match_file_by_type(
+        match_id=match_id,
+        file_type=FileTypeConstants.COMBAT_LOG,
+        output_dir=output_dir,
+        filename_pattern="{match_id}_{filename}",
+        progress_callback=report_progress
+    )
+    print(f"Downloaded {len(combat_logs)} combat logs")
     
-    # Download all match files
-    all_files = sdk.files.download_all_match_files(match_id, output_dir)
+    # Download all files with concurrent downloads
+    all_files = files_api.download_all_match_files(
+        match_id=match_id,
+        output_dir=output_dir,
+        filename_pattern="{match_id}_{filename}",
+        progress_callback=report_progress
+    )
     print(f"Downloaded {len(all_files)} files to {output_dir}")
+    
+    # Get filtered matches
+    matches = files_api.get_filtered_matches(
+        start_date="2025-04-20",
+        end_date="2025-04-21",
+        region_id="1",
+        game_mode="Conquest",
+        min_duration=600,
+        limit=100
+    )
+    print(f"Found {len(matches)} matches matching criteria")
 ```
 
 ## Files API Documentation
@@ -125,18 +149,26 @@ Constants for file types supported by the Files API.
 
 Main class for interacting with match files.
 
-#### Methods:
+#### Key Methods:
 
-- `check_match_exists(match_id, token=None)`: Check if a match exists
-- `list_match_files(match_id, token=None)`: List all files for a match
-- `get_file_metadata(match_id, filename, token=None)`: Get metadata for a specific file
-- `download_match_file(match_id, filename, output_path=None, token=None)`: Download a specific file
-- `download_all_match_files(match_id, output_dir, token=None, file_types=None)`: Download all files for a match
-- `download_combat_log(match_id, session_id=None, output_dir=None, token=None)`: Download combat log
-- `download_chat_log(match_id, session_id=None, output_dir=None, token=None)`: Download chat log
-- `filter_match_files_by_type(match_id, file_type, token=None)`: Filter match files by type
-- `filter_match_files_by_session(match_id, session_id, token=None)`: Filter match files by session ID
-- `download_match_file_by_type(match_id, file_type, session_id=None, output_dir=None, token=None)`: Download files of a specific type
+- **Match Files:**
+  - `check_match_exists(match_id, token=None)`: Check if a match exists
+  - `list_match_files(match_id, token=None, file_type="file")`: List files for a match from specific endpoint
+  - `list_all_match_files(match_id, token=None)`: List files from all available endpoints
+  - `get_file_metadata(match_id, filename, token=None)`: Get metadata for a specific file
+
+- **File Downloads:**
+  - `download_match_file(match_id, filename, output_path=None, token=None)`: Download a specific file
+  - `download_match_files(match_id, files, output_dir, token=None, filename_pattern=None, progress_callback=None, max_concurrent_downloads=3)`: Download multiple files concurrently
+  - `download_all_match_files(match_id, output_dir, token=None, file_types=None, filename_pattern=None)`: Download all files for a match
+  - `download_match_file_by_type(match_id, file_type, output_dir=None, session_id=None, token=None, filename_pattern=None)`: Download files of a specific type
+
+- **Log Specific Methods:**
+  - `download_combat_log(match_id, session_id=None, output_dir=None, token=None)`: Download combat log
+  - `download_chat_log(match_id, session_id=None, output_dir=None, token=None)`: Download chat log
+
+- **Match Filtering:**
+  - `get_filtered_matches(start_date, end_date, region_id=None, game_mode=None, min_duration=None, max_duration=None, limit=10, batch_size=100)`: Get matches filtered by various criteria
 
 ### Exceptions:
 
@@ -157,7 +189,7 @@ See the utility scripts in the repository for more advanced usage examples:
 The `fetch_match_logs.py` script provides a powerful way to fetch logs from multiple matches based on filtering criteria:
 
 ```bash
-python fetch_match_logs.py --min-duration 600 --region-id 1 --game-mode Conquest --matches 100 --start-date 2025-04-20 --end-date 2025-04-21
+python fetch_match_logs.py --min-duration 600 --region-id 1 --game-mode Conquest --matches 100 --start-date 2025-04-20 --end-date 2025-04-21 --file-types CHAT_LOG,COMBAT_LOG --concurrent 5 --preview
 ```
 
 #### Options:
@@ -168,22 +200,22 @@ python fetch_match_logs.py --min-duration 600 --region-id 1 --game-mode Conquest
 - `--min-duration SECS`: Minimum match duration in seconds
 - `--max-duration SECS`: Maximum match duration in seconds
 - `--matches COUNT`: Maximum matches to process (default: 10, use 0 for no limit)
-- `--output-dir DIR`: Directory to save files (default: match_logs)
+- `--output-dir DIR`: Directory to save files (default: chat_logs)
 - `--match-id ID`: Specific match ID to retrieve (overrides filters)
 - `--batch-size SIZE`: Number of matches per API call (default: 100)
 - `--file-types TYPES`: Comma-separated list of file types (default: CHAT_LOG)
 - `--preview`: Preview downloaded files
 - `--fallback-all`: Download all available files if specified types not found
+- `--concurrent INT`: Maximum number of concurrent downloads (default: 3)
 
 #### Output Structure:
-Files are organized by match ID in the output directory:
+Files are saved in a single directory, with filenames that include the match ID:
 ```
-match_logs/
-  ├── match_id_1/
-  │   ├── ChatLog_session_id.log
-  │   └── CombatLog_session_id.log
-  ├── match_id_2/
-  │   └── ...
+chat_logs/
+  ├── match_id_1_ChatLog_session_id.log
+  ├── match_id_1_CombatLog_session_id.log
+  ├── match_id_2_ChatLog_session_id.log
+  └── ...
 ```
 
 ## License
